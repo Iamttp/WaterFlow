@@ -102,17 +102,19 @@ public class ManageScene : MonoBehaviour
                 line.x++;
                 line.y += k;
                 if (lastY != -1 && lastY != (int)line.y)
+                {
                     if (table[(int)line.x, lastY].type == 0)
                     {
                         table[(int)line.x, lastY].type = 1;
-                        path.Add(new Vector2Int((int)line.x, lastY));
                     }
+                    path.Add(new Vector2Int((int)line.x, lastY));
+                }
                 lastY = (int)line.y;
                 if (table[(int)line.x, (int)line.y].type == 0)
                 {
                     table[(int)line.x, (int)line.y].type = 1;
-                    path.Add(new Vector2Int((int)line.x, (int)line.y));
                 }
+                path.Add(new Vector2Int((int)line.x, (int)line.y));
             }
         }
         else
@@ -133,17 +135,19 @@ public class ManageScene : MonoBehaviour
                 line.y++;
                 line.x += k;
                 if (lastX != -1 && lastX != (int)line.x)
+                {
                     if (table[lastX, (int)line.y].type == 0)
                     {
                         table[lastX, (int)line.y].type = 1;
-                        path.Add(new Vector2Int(lastX, (int)line.y));
                     }
+                    path.Add(new Vector2Int(lastX, (int)line.y));
+                }
                 lastX = (int)line.x;
                 if (table[(int)line.x, (int)line.y].type == 0)
                 {
                     table[(int)line.x, (int)line.y].type = 1;
-                    path.Add(new Vector2Int((int)line.x, (int)line.y));
                 }
+                path.Add(new Vector2Int((int)line.x, (int)line.y));
             }
         }
         if (isReverse) path.Reverse();

@@ -52,7 +52,7 @@ public class HouseSelect : MonoBehaviour
         script.now = 0;
         Instantiate(player, transform.position, new Quaternion());
         lastObjScript.value--;
-        
+
         yield return new WaitForSeconds(timeDis);
         StartCoroutine(DelayToInvokeDo(lastObj));
     }
@@ -62,5 +62,16 @@ public class HouseSelect : MonoBehaviour
     {
         Debug.Log("派遣");
         StartCoroutine(DelayToInvokeDo(lastObj));
+    }
+
+    private void OnGUI()
+    {
+        float ContentWidth = 100;
+        float ContentHeight = 50;
+        //获取屏幕坐标
+        Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
+        //将屏幕坐标转化为GUI坐标
+        Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
+        GUI.Label(new Rect(mPoint.x, mPoint.y, ContentWidth, ContentHeight), value.ToString());
     }
 }
