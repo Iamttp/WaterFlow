@@ -82,7 +82,7 @@ public class House : MonoBehaviour
     }
 
 
-    void JustAttack(GameObject lastObj)
+    public void JustAttack(GameObject lastObj)
     {
         int val = lastObj.GetComponent<House>().value / 2; // 每次移动一半
         if (lastObj.GetComponent<House>().owner == owner && value + val > maxValue) val = maxValue - value;
