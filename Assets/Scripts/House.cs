@@ -6,7 +6,10 @@ public class House : MonoBehaviour
 {
     [Header("House属性")]
     public int value;                           // 城堡生命值
+    public int perValue;
     public int maxValue;                        // 最大生命值
+    public int lv;                              // 等级
+    public int maxLv;
     public int owner;
     public static float timeDisOfAdd = 0.9f;    // 城堡生命值增加间隔
     public static float timeDisOfMove = 0.1f;   // 士兵移动时间间隔
@@ -18,6 +21,8 @@ public class House : MonoBehaviour
 
     void Start()
     {
+        lv = 1;
+        maxValue = lv * perValue;
         timeUse = timeDisOfAdd;
     }
 
@@ -27,7 +32,8 @@ public class House : MonoBehaviour
         if (timeUse <= 0)
         {
             timeUse = timeDisOfAdd;
-            if(value < maxValue) value++;
+            if (value < maxValue) value++;
+            else if (value > maxValue) value--;
         }
     }
 
@@ -79,19 +85,27 @@ public class House : MonoBehaviour
     void JustAttack(GameObject lastObj)
     {
         int val = lastObj.GetComponent<House>().value / 2; // 每次移动一半
-        // TODO 移动不超过目的地满 城堡owner改变
-
-        StartCoroutine(DelayToInvokeDo(lastObj, val));
+        if (lastObj.GetComponent<House>().owner == owner && value + val > maxValue) val = maxValue - value;
+        StartCoroutine(DelayToInvokeDo(lastObj, lastObj.GetComponent<House>().value - val));
     }
 
     private void OnGUI()
     {
-        float ContentWidth = 100;
-        float ContentHeight = 50;
-        //获取屏幕坐标
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
-        //将屏幕坐标转化为GUI坐标
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x, mPoint.y, ContentWidth, ContentHeight), value.ToString());
+
+        if (lv < maxLv && value >= maxValue)
+        {
+            if (GUI.Button(new Rect(mPoint.x, mPoint.y + 3, 30, 20), "UP"))
+            {
+                value -= maxValue;
+                maxValue = ++lv * perValue;
+            }
+            GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 3, 40, 20), value.ToString() + "/" + maxValue.ToString());
+        }
+        else
+        {
+            GUI.Label(new Rect(mPoint.x, mPoint.y + 3, 40, 20), value.ToString() + "/" + maxValue.ToString());
+        }
     }
 }

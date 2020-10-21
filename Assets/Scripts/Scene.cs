@@ -217,8 +217,9 @@ public class Scene : MonoBehaviour
 
     void Update()
     {
-        for(int i = 0; i < housePosArray.Count; i++)
+        for (int i = 0; i < housePosArray.Count; i++)
         {
+            houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.color = colorTable[houseOfOwner[i]];
         }
     }

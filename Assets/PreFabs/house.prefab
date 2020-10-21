@@ -107,6 +107,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 0
-  maxValue: 10
+  perValue: 10
+  maxValue: 0
+  lv: 0
+  maxLv: 3
+  owner: 0
   player: {fileID: 250108426481264022, guid: 5955ec7bf6097294494f45d454bb1f12, type: 3}
   index: 2

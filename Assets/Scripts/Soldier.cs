@@ -27,8 +27,18 @@ public class Soldier : MonoBehaviour
             now++;
             if (now >= path.Count)
             {
-                if (dstHouse.GetComponent<House>().owner != owner) dstHouse.GetComponent<House>().value--;
-                else dstHouse.GetComponent<House>().value++;
+                var script = dstHouse.GetComponent<House>();
+                if (script.owner != owner)
+                {
+                    script.value--;
+                    if(script.value <= 0)
+                    {
+                        script.owner = owner;
+                        script.lv = 1;
+                        script.maxValue = script.lv * script.perValue;
+                    }
+                }
+                else script.value++;
                 DestroyImmediate(gameObject);
                 return;
             }
