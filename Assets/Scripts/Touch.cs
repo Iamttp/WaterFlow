@@ -33,8 +33,17 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect)
                         {
-                            isSelect = true;
-                            obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
+                            if((obj.GetComponent<House>().owner == User.instance.owner || User.instance.owner == -1))
+                            {
+                                isSelect = true;
+                                obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
+                            }
+                            else
+                            {
+                                isSelect = false;
+                                if (lastObj.name == "house(Clone)")
+                                    lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                            }
                         }
                         else
                         {

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 TODO 不同城堡间路径重合需解决
@@ -13,6 +15,7 @@ public class Scene : MonoBehaviour
     public GameObject house;
     public GameObject stop;
     public GameObject go;
+    public Text level;
 
     [Header("地图基本属性")]
     public int width;
@@ -146,7 +149,7 @@ public class Scene : MonoBehaviour
         }
         if (isReverse) path.Reverse();
         for (int i = 3; i < path.Count - 3; i++)
-            if (table[path[i].x, path[i].y].type == 1)
+            if (table[path[i].x, path[i].y].type == 1 || table[path[i].x, path[i].y].type == 2)
                 return false;
         for (int i = 0; i < path.Count; i++)
         {
@@ -175,6 +178,19 @@ public class Scene : MonoBehaviour
                         houseRoadPath[i, k] = null;
                     }
                 }
+
+        for (int i = 0; i < housePosArray.Count; i++)
+        {
+            bool isOK = false;
+            for (int k = 0; k < housePosArray.Count; k++)
+                if (i != k || houseRoadPath[i, k] != null)
+                {
+                    isOK = true;
+                    break;
+                }
+            if (!isOK)
+                Debug.LogError("---------");
+        }
     }
 
     void Awake()
@@ -213,14 +229,32 @@ public class Scene : MonoBehaviour
     void Start()
     {
         renderScene();
+        level.text = "Level " + Global.instance.lev;
     }
 
     void Update()
     {
+        int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
             houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
+            if (houseOfOwner[i] == User.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.color = colorTable[houseOfOwner[i]];
         }
+        if (num == housePosArray.Count)
+        {
+            // TODO 游戏胜利 下一关
+            Global.instance.timeOfAttack /= 2.0f;
+            Global.instance.TimeOfUP /= 2.0f;
+            ++Global.instance.lev;
+            SceneManager.LoadScene(1);
+        }
+        else if (num == 0)
+        {
+            // TODO 游戏结束 重新开始
+            Global.instance.DataInit();
+            SceneManager.LoadScene(1);
+        }
+
     }
 }

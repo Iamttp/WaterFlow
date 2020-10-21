@@ -89,23 +89,25 @@ public class House : MonoBehaviour
         StartCoroutine(DelayToInvokeDo(lastObj, lastObj.GetComponent<House>().value - val));
     }
 
+
+    GUIStyle style = new GUIStyle();
     private void OnGUI()
     {
+        style.fontSize = 25;
+
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-
-        if (lv < maxLv && value >= maxValue)
+        if (owner == User.instance.owner || User.instance.owner == -1)
         {
-            if (GUI.Button(new Rect(mPoint.x, mPoint.y + 3, 30, 20), "UP"))
+            if (lv < maxLv && value >= maxValue)
             {
-                value -= maxValue;
-                maxValue = ++lv * perValue;
+                if (GUI.Button(new Rect(mPoint.x, mPoint.y + 30, 50, 30), "UP"))
+                {
+                    value -= maxValue;
+                    maxValue = ++lv * perValue;
+                }
             }
-            GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 3, 40, 20), value.ToString() + "/" + maxValue.ToString());
         }
-        else
-        {
-            GUI.Label(new Rect(mPoint.x, mPoint.y + 3, 40, 20), value.ToString() + "/" + maxValue.ToString());
-        }
+        GUI.Label(new Rect(mPoint.x, mPoint.y + 3, 50, 30), value.ToString() + "/" + maxValue.ToString(), style);
     }
 }

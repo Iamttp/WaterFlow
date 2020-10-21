@@ -33,6 +33,7 @@ public class Soldier : MonoBehaviour
                     script.value--;
                     if(script.value <= 0)
                     {
+                        script.value = 0;
                         script.owner = owner;
                         script.lv = 1;
                         script.maxValue = script.lv * script.perValue;
