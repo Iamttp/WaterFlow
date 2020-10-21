@@ -331,11 +331,18 @@ MonoBehaviour:
   stop: {fileID: 4248667660118219598, guid: 528ca0708bddf21429eaa130039528af, type: 3}
   go: {fileID: 4248667660118219598, guid: f74f79c678ee42a488786ad9145c2571, type: 3}
   myGameObject: {fileID: 1711564576}
-  width: 30
-  height: 30
-  sizeOfHouse: 3
+  width: 50
+  height: 50
+  sizeOfHouse: 8
   sizeOfVis: 3
   allScale: 0.5
+  houseOfOwner: 
+  colorTable:
+  - {r: 0.077162705, g: 0.248432, b: 0.9622642, a: 0}
+  - {r: 0.9433962, g: 0.06674972, b: 0.06674972, a: 0}
+  - {r: 0.9528302, g: 0.0764062, b: 0.94537675, a: 0}
+  - {r: 0.4484298, g: 0.9716981, b: 0.05958529, a: 0}
+  housePosArray: []
 --- !u!4 &1711564578
 Transform:
   m_ObjectHideFlags: 0
@@ -362,11 +369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f788bd8d5673394a99527da5a6c7b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axes: 0
-  sensitivityX: 15
-  sensitivityY: 15
-  minimumY: -60
-  maximumY: 60
 --- !u!114 &1711564580
 MonoBehaviour:
   m_ObjectHideFlags: 0

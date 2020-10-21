@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchManager : MonoBehaviour
+/// <summary>
+/// 管理鼠标点击选中
+/// </summary>
+public class Touch : MonoBehaviour
 {
     public Camera myCamera;
     private float hitTime = 0f;
@@ -44,7 +47,7 @@ public class TouchManager : MonoBehaviour
                     else
                     {
                         isSelect = false;
-                        if (lastObj.name == "house(Clone)") 
+                        if (lastObj.name == "house(Clone)")
                             lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
                     }
                     lastObj = obj;
