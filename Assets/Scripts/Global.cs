@@ -9,13 +9,13 @@ public class Global : MonoBehaviour
     public int owner;
     public int lev;
     public float timeOfAttack;
-    public float TimeOfUP;
+    public float timeOfUP;
 
     public void DataInit()
     {
         lev = 1;
         timeOfAttack = 1f;
-        TimeOfUP = 2f;
+        timeOfUP = 2f;
     }
 
     void Awake()

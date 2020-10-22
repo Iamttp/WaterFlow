@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO soldier coll test
-// map better
-
 public class Computer : MonoBehaviour
 {
     public static Computer instance;
@@ -38,7 +36,7 @@ public class Computer : MonoBehaviour
         }
 
         hitTimeOfUP += Time.deltaTime;
-        if (hitTimeOfUP > Global.instance.TimeOfUP)
+        if (hitTimeOfUP > Global.instance.timeOfUP)
         {
             hitTimeOfUP = 0f;
             int i = Random.Range(0, obj.housePosArray.Count);

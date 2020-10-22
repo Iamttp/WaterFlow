@@ -16,6 +16,7 @@ public class Scene : MonoBehaviour
     public GameObject stop;
     public GameObject go;
     public Text level;
+    public Text show;
 
     [Header("地图基本属性")]
     public int width;
@@ -183,13 +184,16 @@ public class Scene : MonoBehaviour
         {
             bool isOK = false;
             for (int k = 0; k < housePosArray.Count; k++)
-                if (i != k || houseRoadPath[i, k] != null)
+                if (i != k && houseRoadPath[i, k] != null)
                 {
                     isOK = true;
                     break;
                 }
             if (!isOK)
-                Debug.LogError("---------");
+            {
+                Debug.Log("map error restart");
+                restart();
+            }
         }
     }
 
@@ -230,7 +234,27 @@ public class Scene : MonoBehaviour
     {
         renderScene();
         level.text = "Level " + Global.instance.lev;
+        show.enabled = false;
     }
+
+    private IEnumerator GameEnd()
+    {
+        yield return new WaitForSeconds(3);
+        show.enabled = false;
+        Global.instance.DataInit();
+        SceneManager.LoadScene(1);
+    } 
+    
+    private IEnumerator GameNEXT()
+    {
+        yield return new WaitForSeconds(3);
+        show.enabled = false;
+        Global.instance.timeOfAttack /= 5.0f;
+        Global.instance.timeOfUP /= 5.0f;
+        ++Global.instance.lev;
+        SceneManager.LoadScene(1);
+    }
+
 
     void Update()
     {
@@ -243,17 +267,17 @@ public class Scene : MonoBehaviour
         }
         if (num == housePosArray.Count)
         {
-            // TODO 游戏胜利 下一关
-            Global.instance.timeOfAttack /= 2.0f;
-            Global.instance.TimeOfUP /= 2.0f;
-            ++Global.instance.lev;
-            SceneManager.LoadScene(1);
+            // 游戏胜利 下一关
+            show.enabled = true;
+            show.text = "NEXT LEVEL";
+            StartCoroutine(GameNEXT());
         }
         else if (num == 0)
         {
-            // TODO 游戏结束 重新开始
-            Global.instance.DataInit();
-            SceneManager.LoadScene(1);
+            // 游戏结束 重新开始
+            show.enabled = true;
+            show.text = "GAME OVER";
+            StartCoroutine(GameEnd());
         }
     }
 

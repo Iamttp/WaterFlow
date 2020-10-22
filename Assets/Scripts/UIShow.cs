@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 渲染到渲染纹理。显示当前局势
+/// </summary>
 public class UIShow : MonoBehaviour
 {
     public GameObject cube;
@@ -33,7 +36,7 @@ public class UIShow : MonoBehaviour
 
         for (int i = 0; i < len; i++)
         {
-            table[scene.houseOfOwner[i]]++; // TODO
+            table[scene.houseOfOwner[i]]++; // TODO 兵力显示
         }
 
         int index = 0;

@@ -68,7 +68,7 @@ Shader "Unlit/SelectShader"
                 fixed3 rimColor = _RimColor * pow(rim, 1 / _RimPower);
 
                 fixed4 color;
-                color.rgb = rimColor.rgb + (_Color.rgb * sin(_Time.y) * 0.5 + 0.5);
+                color.rgb = rimColor.rgb + (_Color.rgb * sin(_Time.y * 10) * 0.5 + 0.5);
                 return color;
             }
             ENDCG
