@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO soldier coll test
+// map better
+
 public class Computer : MonoBehaviour
 {
     public static Computer instance;
@@ -21,13 +24,17 @@ public class Computer : MonoBehaviour
         if (hitTimeOfAttack > Global.instance.timeOfAttack)
         {
             hitTimeOfAttack = 0f;
-            int i = Random.Range(0, obj.housePosArray.Count);
-            int k = Random.Range(0, obj.housePosArray.Count);
-            if (obj.posToHouse[obj.housePosArray[k]].GetComponent<House>().owner != User.instance.owner && i != k)
+            int haveTest = 3; // 尝试3次
+            while (haveTest-- > 0)
             {
-                obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().JustAttack(obj.posToHouse[obj.housePosArray[k]]);
+                int i = Random.Range(0, obj.housePosArray.Count);
+                int k = Random.Range(0, obj.housePosArray.Count);
+                if (obj.posToHouse[obj.housePosArray[k]].GetComponent<House>().owner != User.instance.owner && i != k)
+                {
+                    obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().JustAttack(obj.posToHouse[obj.housePosArray[k]]);
+                    break;
+                }
             }
-
         }
 
         hitTimeOfUP += Time.deltaTime;

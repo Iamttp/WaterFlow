@@ -255,6 +255,12 @@ public class Scene : MonoBehaviour
             Global.instance.DataInit();
             SceneManager.LoadScene(1);
         }
+    }
 
+
+    public void restart()
+    {
+        Global.instance.DataInit();
+        SceneManager.LoadScene(1);
     }
 }

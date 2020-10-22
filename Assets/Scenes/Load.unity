@@ -281,8 +281,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -29.493}
+  m_SizeDelta: {x: 243, y: 58.986755}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &194186177
 MonoBehaviour:
@@ -484,7 +484,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534566593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.328117, y: 2.4350796, z: -7.4325895}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -516,6 +516,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: 0
+  lev: 0
+  timeOfAttack: 0
+  TimeOfUP: 0
 --- !u!1 &540355657
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,8 +557,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 83, y: 49}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 132.39, y: 69.902}
+  m_SizeDelta: {x: 264.7754, y: 51.182587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &540355659
 MonoBehaviour:
@@ -605,13 +608,13 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: "\u84DD"
+    - m_Text: BLUE
       m_Image: {fileID: 0}
-    - m_Text: "\u7EA2"
+    - m_Text: RED
       m_Image: {fileID: 0}
-    - m_Text: "\u7C89"
+    - m_Text: PINK
       m_Image: {fileID: 0}
-    - m_Text: "\u7EFF"
+    - m_Text: GREEN
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -712,10 +715,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -723,7 +726,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u84DD"
+  m_Text: BLUE
 --- !u!222 &575355763
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -864,7 +867,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -875,7 +878,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BEGIN GAME
+  m_Text: START GAME
 --- !u!222 &802402957
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1575,8 +1578,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 47}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -156.08, y: 69.902}
+  m_SizeDelta: {x: 312.16202, y: 44.493347}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1599521026
 MonoBehaviour:
@@ -1599,7 +1602,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1610,7 +1613,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u52BF\u529B\u9009\u62E9\uFF1A"
+  m_Text: 'CHOOSE COLOR: '
 --- !u!222 &1599521027
 CanvasRenderer:
   m_ObjectHideFlags: 0
