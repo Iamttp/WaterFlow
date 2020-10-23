@@ -37,7 +37,7 @@ public class UIShow : MonoBehaviour
 
         for (int i = 0; i < len; i++)
         {
-            table[scene.houseOfOwner[i]]++; // TODO 兵力显示
+            table[scene.houseOfOwner[i]]++;
         }
 
         int index = 0;

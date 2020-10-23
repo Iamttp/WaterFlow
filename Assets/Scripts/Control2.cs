@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// TODO 双指 
-/// git 分支上传
-/// </summary>
-
 public class Control2 : MonoBehaviour
 {
 

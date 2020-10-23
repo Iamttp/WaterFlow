@@ -5,8 +5,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// 单例类，全局管理，包含地图生成绘制 TODO 不同城堡间路径重合需解决
-/// TODO 局域网 粒子特效
+/// 单例类，全局管理，包含地图生成绘制 
+/// 
+/// TODO 不同城堡间路径重合需解决
+/// TODO 局域网 
+/// TODO 粒子特效 
+/// TODO 士兵间碰撞 （现在未考虑士兵碰撞）
+/// TODO 手机双指操作优化 
+/// TODO 兵力显示（现在为城堡数显示）
 /// 
 /// 选择颜色，开始游戏
 /// 通过点击矩形城堡，派遣士兵

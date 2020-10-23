@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO soldier coll test
 public class Computer : MonoBehaviour
 {
     public static Computer instance;
