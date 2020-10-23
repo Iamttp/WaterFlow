@@ -43,6 +43,6 @@ public class UIShow : MonoBehaviour
         int index = 0;
         for (int j = 0; j < 4; j++)
             while (table[j]-- > 0)
-                gameObjects[index++].GetComponent<MeshRenderer>().material.color = scene.colorTable[j];
+                gameObjects[index++].GetComponent<MeshRenderer>().material.SetColor("_Color", scene.colorTable[j]);
     }
 }

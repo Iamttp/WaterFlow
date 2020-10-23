@@ -14,7 +14,7 @@ public class Soldier : MonoBehaviour
     void Start()
     {
         timeUse = House.timeDisOfMove;
-        gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.colorTable[owner];
+        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
     }
 
     void Update()
@@ -32,9 +32,13 @@ public class Soldier : MonoBehaviour
                 if (script.owner != owner)
                 {
                     script.value--;
-                    if(script.value <= 0)
+                    if (script.value <= 0)
                     {
                         script.value = 0;
+                        if (script.owner == User.instance.owner || owner == User.instance.owner)
+                        {
+                            Effect.instance.shake();
+                        }
                         script.owner = owner;
                         script.lv = 1;
                         script.maxValue = script.lv * script.perValue;

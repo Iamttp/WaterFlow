@@ -261,8 +261,8 @@ public class Scene : MonoBehaviour
         Global.instance.DataInit();
         flag = false;
         SceneManager.LoadScene(1);
-    } 
-    
+    }
+
     private IEnumerator GameNEXT()
     {
         yield return new WaitForSeconds(3);
@@ -282,7 +282,7 @@ public class Scene : MonoBehaviour
         {
             houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
             if (houseOfOwner[i] == User.instance.owner) num++;
-            posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.color = colorTable[houseOfOwner[i]];
+            posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
         }
         if (flag) return;
         if (num == housePosArray.Count)

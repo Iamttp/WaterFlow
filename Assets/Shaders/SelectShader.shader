@@ -8,7 +8,7 @@ Shader "Unlit/SelectShader"
         _Color("color", Color) = (1.0,1.0,1.0,1.0)
         _Rate("rate", Float) = 10
     }
-        SubShader
+    SubShader
     {
         Tags { "RenderType" = "Opaque" }
         LOD 100
