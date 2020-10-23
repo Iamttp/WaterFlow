@@ -209,7 +209,7 @@ public class Scene : MonoBehaviour
             if (!isOK)
             {
                 Debug.Log("map error restart");
-                restart();
+                SceneManager.LoadScene(2);
             }
         }
     }

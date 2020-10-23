@@ -24,8 +24,8 @@ public class Effect : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         Vector3 dirVector3 = Vector3.zero;
-        dirVector3.y = Mathf.Sin(Time.time) * Random.Range(0, 5);
-        dirVector3.x = Mathf.Cos(Time.time) * Random.Range(0, 5);
+        dirVector3.y = Mathf.Sin(Time.time) * Random.Range(0, 3);
+        dirVector3.x = Mathf.Cos(Time.time) * Random.Range(0, 3);
         Camera.main.transform.position = lastPos + dirVector3;
         timeOfShake++;
         if (timeOfShake == 10)

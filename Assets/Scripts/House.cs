@@ -11,19 +11,36 @@ public class House : MonoBehaviour
     public int lv;                              // 等级
     public int maxLv;
     public int owner;
-    public static float timeDisOfAdd = 0.9f;    // 城堡生命值增加间隔
-    public static float timeDisOfMove = 0.1f;   // 士兵移动时间间隔
+    public float timeDisOfAdd;    // 城堡生命值增加间隔
+    public float timeDisOfMove;   // 士兵移动时间间隔
 
     public GameObject player;                   // save player
     public int index;                           // houseArray index
 
     private float timeUse;
 
-    void Start()
+    public void initHouse()
     {
         lv = 1;
-        maxValue = lv * perValue;
+        value = 0;
+        if (owner == Global.instance.owner)
+        {
+            maxValue = Mathf.RoundToInt(lv * perValue * Global.instance.buffOfSize);
+            timeDisOfAdd /= Global.instance.buffOfAddSpeed;
+            timeDisOfMove /= Global.instance.buffOfMoveSpeed;
+        }
+        else
+        {
+            maxValue = lv * perValue;
+            timeDisOfAdd = 0.9f;
+            timeDisOfMove = 0.1f;
+        }
         timeUse = timeDisOfAdd;
+    }
+
+    void Start()
+    {
+        initHouse();
     }
 
     void Update()
@@ -76,6 +93,7 @@ public class House : MonoBehaviour
         script.basePos = lastObj.transform.position;
         script.now = 0;
         script.owner = lastObjScript.owner;
+        script.srcHouseScript = lastObjScript;
         Instantiate(player, transform.position, new Quaternion());
         lastObjScript.value--;
 
