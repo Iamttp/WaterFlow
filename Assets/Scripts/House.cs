@@ -28,6 +28,7 @@ public class House : MonoBehaviour
 
     void Update()
     {
+        if (Scene.instance.isStop) return;
         timeUse -= Time.deltaTime;
         if (timeUse <= 0)
         {
@@ -39,14 +40,15 @@ public class House : MonoBehaviour
 
     void OnTouched()
     {
-        gameObject.GetComponent<MeshRenderer>().material =
-            Resources.Load<Material>("Materials/New Material 3");
         for (int k = 0; k < Scene.instance.sizeOfHouse; k++)
             if (Scene.instance.g[index, k] != 0)
             {
                 GameObject obj = Scene.instance.posToHouse[Scene.instance.housePosArray[k]];
                 obj.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
+                obj.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 10);
             }
+        gameObject.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
+        gameObject.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 2);
     }
 
     void UnTouched()
@@ -93,7 +95,7 @@ public class House : MonoBehaviour
     GUIStyle style = new GUIStyle();
     private void OnGUI()
     {
-        style.fontSize = 25;
+        style.fontSize = 45;
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
@@ -101,13 +103,13 @@ public class House : MonoBehaviour
         {
             if (lv < maxLv && value >= maxValue)
             {
-                if (GUI.Button(new Rect(mPoint.x, mPoint.y + 30, 50, 30), "UP"))
+                if (GUI.Button(new Rect(mPoint.x, mPoint.y + 50, 60, 50), "UP"))
                 {
                     value -= maxValue;
                     maxValue = ++lv * perValue;
                 }
             }
         }
-        GUI.Label(new Rect(mPoint.x, mPoint.y + 3, 50, 30), value.ToString() + "/" + maxValue.ToString(), style);
+        GUI.Label(new Rect(mPoint.x, mPoint.y + 10, 60, 50), value.ToString() + "/" + maxValue.ToString(), style);
     }
 }

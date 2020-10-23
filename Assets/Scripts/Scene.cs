@@ -6,6 +6,12 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 TODO 不同城堡间路径重合需解决
+/// TODO 局域网 粒子特效
+/// 
+/// 选择颜色，开始游戏
+/// 通过点击矩形城堡，派遣士兵
+/// 攻占所有城堡，游戏胜利
+/// 失去城堡，游戏失败
 /// </summary>
 public class Scene : MonoBehaviour
 {
@@ -17,6 +23,7 @@ public class Scene : MonoBehaviour
     public GameObject go;
     public Text level;
     public Text show;
+    public Text stopButton;
 
     [Header("地图基本属性")]
     public int width;
@@ -40,6 +47,8 @@ public class Scene : MonoBehaviour
     public Dictionary<Vector2Int, GameObject> posToHouse;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
+
+    public bool isStop;
 
     /// <summary>
     /// 在x,y处放置house 周围不出现
@@ -200,6 +209,7 @@ public class Scene : MonoBehaviour
     void Awake()
     {
         instance = this;
+        Screen.SetResolution(1920, 1080, false);
         initHouseData();
         initRoadData();
     }
@@ -237,11 +247,13 @@ public class Scene : MonoBehaviour
         show.enabled = false;
     }
 
+    static bool flag = false; // 用于控制，防止重复StartCoroutine
     private IEnumerator GameEnd()
     {
         yield return new WaitForSeconds(3);
         show.enabled = false;
         Global.instance.DataInit();
+        flag = false;
         SceneManager.LoadScene(1);
     } 
     
@@ -249,15 +261,16 @@ public class Scene : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         show.enabled = false;
-        Global.instance.timeOfAttack /= 5.0f;
-        Global.instance.timeOfUP /= 5.0f;
+        Global.instance.timeOfAttack /= 2.0f;
+        Global.instance.timeOfUP /= 2.0f;
         ++Global.instance.lev;
+        flag = false;
         SceneManager.LoadScene(1);
     }
 
-
     void Update()
     {
+        if (isStop) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
@@ -265,9 +278,11 @@ public class Scene : MonoBehaviour
             if (houseOfOwner[i] == User.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.color = colorTable[houseOfOwner[i]];
         }
+        if (flag) return;
         if (num == housePosArray.Count)
         {
             // 游戏胜利 下一关
+            flag = true;
             show.enabled = true;
             show.text = "NEXT LEVEL";
             StartCoroutine(GameNEXT());
@@ -275,6 +290,7 @@ public class Scene : MonoBehaviour
         else if (num == 0)
         {
             // 游戏结束 重新开始
+            flag = true;
             show.enabled = true;
             show.text = "GAME OVER";
             StartCoroutine(GameEnd());
@@ -286,5 +302,12 @@ public class Scene : MonoBehaviour
     {
         Global.instance.DataInit();
         SceneManager.LoadScene(1);
+    }
+
+    public void stopFun()
+    {
+        isStop = !isStop;
+        if (isStop) stopButton.text = "START";
+        else stopButton.text = "STOP";
     }
 }

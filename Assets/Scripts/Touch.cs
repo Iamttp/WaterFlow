@@ -19,6 +19,7 @@ public class Touch : MonoBehaviour
 
     void Update()
     {
+        if (Scene.instance.isStop) return;
         hitTime += Time.deltaTime;
         if (hitTime > 0.2f)
         {

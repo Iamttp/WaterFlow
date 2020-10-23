@@ -16,6 +16,7 @@ public class Computer : MonoBehaviour
 
     void Update()
     {
+        if (Scene.instance.isStop) return;
         var obj = Scene.instance;
 
         hitTimeOfAttack += Time.deltaTime;

@@ -20,9 +20,12 @@ public class Global : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        instance = this;
-        DataInit();
+        if(instance == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+            DataInit();
+        }
     }
 
     void Update()

@@ -19,6 +19,7 @@ public class Soldier : MonoBehaviour
 
     void Update()
     {
+        if (Scene.instance.isStop) return;
         timeUse -= Time.deltaTime;
         if (timeUse < 0)
         {

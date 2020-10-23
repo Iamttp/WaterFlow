@@ -31,6 +31,7 @@ public class UIShow : MonoBehaviour
 
     void Update()
     {
+        if (Scene.instance.isStop) return;
         for (int j = 0; j < 4; j++)
             table[j] = 0;
 
