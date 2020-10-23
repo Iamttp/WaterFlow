@@ -19,7 +19,7 @@ public class Touch : MonoBehaviour
 
     void Update()
     {
-        if (Scene.instance.isStop) return;
+        if (Global.instance.isStop) return;
         hitTime += Time.deltaTime;
         if (hitTime > 0.2f)
         {
@@ -34,7 +34,7 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect)
                         {
-                            if((obj.GetComponent<House>().owner == User.instance.owner || User.instance.owner == -1))
+                            if((obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1))
                             {
                                 isSelect = true;
                                 obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);

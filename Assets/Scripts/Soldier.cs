@@ -19,7 +19,7 @@ public class Soldier : MonoBehaviour
 
     void Update()
     {
-        if (Scene.instance.isStop) return;
+        if (Global.instance.isStop) return;
         timeUse -= Time.deltaTime;
         if (timeUse < 0)
         {
@@ -35,7 +35,7 @@ public class Soldier : MonoBehaviour
                     if (script.value <= 0)
                     {
                         script.value = 0;
-                        if (script.owner == User.instance.owner || owner == User.instance.owner)
+                        if (script.owner == Global.instance.owner || owner == Global.instance.owner)
                         {
                             Effect.instance.shake();
                         }

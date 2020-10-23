@@ -20,17 +20,19 @@ public class Effect : MonoBehaviour
 
     private IEnumerator shakeEffect()
     {
+        Global.instance.isStop = true;
         yield return new WaitForSeconds(0.1f);
 
         Vector3 dirVector3 = Vector3.zero;
-        dirVector3.y = Mathf.Sin(Time.time) * Random.Range(2, 8);
-        dirVector3.x = Mathf.Cos(Time.time) * Random.Range(2, 8);
+        dirVector3.y = Mathf.Sin(Time.time) * Random.Range(0, 5);
+        dirVector3.x = Mathf.Cos(Time.time) * Random.Range(0, 5);
         Camera.main.transform.position = lastPos + dirVector3;
         timeOfShake++;
         if (timeOfShake == 10)
         {
             timeOfShake = 0;
             Camera.main.transform.position = lastPos;
+            Global.instance.isStop = false;
         }
         else
             StartCoroutine(shakeEffect());

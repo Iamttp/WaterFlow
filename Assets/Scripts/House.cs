@@ -28,7 +28,7 @@ public class House : MonoBehaviour
 
     void Update()
     {
-        if (Scene.instance.isStop) return;
+        if (Global.instance.isStop) return;
         timeUse -= Time.deltaTime;
         if (timeUse <= 0)
         {
@@ -99,7 +99,7 @@ public class House : MonoBehaviour
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        if (owner == User.instance.owner || User.instance.owner == -1)
+        if (owner == Global.instance.owner || Global.instance.owner == -1)
         {
             if (lv < maxLv && value >= maxValue)
             {

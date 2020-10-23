@@ -18,6 +18,10 @@ using UnityEngine.UI;
 /// 通过点击矩形城堡，派遣士兵
 /// 攻占所有城堡，游戏胜利
 /// 失去城堡，游戏失败
+/// 
+/// WASD / 单指拖动 -> 移动视角
+/// 鼠标滚轮 / 双指(单指不动) -> 缩放视角
+/// 鼠标左键 / 单指点击 -> 选择
 /// </summary>
 public class Scene : MonoBehaviour
 {
@@ -53,8 +57,6 @@ public class Scene : MonoBehaviour
     public Dictionary<Vector2Int, GameObject> posToHouse;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
-
-    public bool isStop;
 
     /// <summary>
     /// 在x,y处放置house 周围不出现
@@ -253,13 +255,11 @@ public class Scene : MonoBehaviour
         show.enabled = false;
     }
 
-    static bool flag = false; // 用于控制，防止重复StartCoroutine
     private IEnumerator GameEnd()
     {
         yield return new WaitForSeconds(3);
-        show.enabled = false;
+        show.enabled = false; 
         Global.instance.DataInit();
-        flag = false;
         SceneManager.LoadScene(1);
     }
 
@@ -270,25 +270,25 @@ public class Scene : MonoBehaviour
         Global.instance.timeOfAttack /= 2.0f;
         Global.instance.timeOfUP /= 2.0f;
         ++Global.instance.lev;
-        flag = false;
+        Global.instance.flag = false;
         SceneManager.LoadScene(1);
     }
 
     void Update()
     {
-        if (isStop) return;
+        if (Global.instance.isStop) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
-            houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
-            if (houseOfOwner[i] == User.instance.owner) num++;
+             houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
+            if (houseOfOwner[i] == Global.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
         }
-        if (flag) return;
+        if (Global.instance.flag) return;
         if (num == housePosArray.Count)
         {
             // 游戏胜利 下一关
-            flag = true;
+            Global.instance.flag = true;
             show.enabled = true;
             show.text = "NEXT LEVEL";
             StartCoroutine(GameNEXT());
@@ -296,7 +296,7 @@ public class Scene : MonoBehaviour
         else if (num == 0)
         {
             // 游戏结束 重新开始
-            flag = true;
+            Global.instance.flag = true;
             show.enabled = true;
             show.text = "GAME OVER";
             StartCoroutine(GameEnd());
@@ -312,8 +312,8 @@ public class Scene : MonoBehaviour
 
     public void stopFun()
     {
-        isStop = !isStop;
-        if (isStop) stopButton.text = "START";
+        Global.instance.isStop = !Global.instance.isStop;
+        if (Global.instance.isStop) stopButton.text = "START";
         else stopButton.text = "STOP";
     }
 }

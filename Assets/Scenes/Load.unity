@@ -515,10 +515,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d3b00d6c1fc574d9c196055708e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: 0
+  fps: 30
   lev: 0
+  flag: 0
+  isStop: 0
   timeOfAttack: 0
   timeOfUP: 0
+  owner: 0
+  buffOfAttack: 0
+  buffOfMoveSpeed: 0
+  buffOfAddSpeed: 0
+  buffOfSize: 0
 --- !u!1 &540355657
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,13 +615,13 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: BLUE
+    - m_Text: "BLUE \u84DD"
       m_Image: {fileID: 0}
-    - m_Text: RED
+    - m_Text: "RED \u7EA2"
       m_Image: {fileID: 0}
-    - m_Text: PINK
+    - m_Text: "PINK \u7C89"
       m_Image: {fileID: 0}
-    - m_Text: GREEN
+    - m_Text: "GREEN \u7EFF"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -726,7 +733,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BLUE
+  m_Text: "BLUE \u84DD"
 --- !u!222 &575355763
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -868,7 +875,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 45
-    m_FontStyle: 1
+    m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 45
@@ -956,7 +963,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: START GAME
+  m_Text: "\u5F00\u59CB\u6E38\u620F"
 --- !u!222 &802402957
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1681,7 +1688,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 50
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 50
@@ -1691,7 +1698,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'CHOOSE COLOR: '
+  m_Text: "\u9009\u62E9\u989C\u8272\uFF1A"
 --- !u!222 &1599521027
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1759,7 +1766,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 45
-    m_FontStyle: 1
+    m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 45
@@ -1769,14 +1776,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Choose color start game
-
-    Send soldiers by clicking on castle
-
-    Take
-    all castles win game
-
-    Lose castle, lose game'
+  m_Text: "WASD / \u5355\u6307\u62D6\u52A8 -> \u79FB\u52A8\u89C6\u89D2\r\n\u9F20\u6807\u6EDA\u8F6E
+    / \u53CC\u6307(\u5355\u6307\u4E0D\u52A8) -> \u7F29\u653E\u89C6\u89D2\r\n\u9F20\u6807\u5DE6\u952E
+    / \u5355\u6307\u70B9\u51FB -> \u9009\u62E9"
 --- !u!222 &1632235012
 CanvasRenderer:
   m_ObjectHideFlags: 0

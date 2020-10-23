@@ -15,7 +15,7 @@ public class Computer : MonoBehaviour
 
     void Update()
     {
-        if (Scene.instance.isStop) return;
+        if (Global.instance.isStop) return;
         var obj = Scene.instance;
 
         hitTimeOfAttack += Time.deltaTime;
@@ -27,7 +27,7 @@ public class Computer : MonoBehaviour
             {
                 int i = Random.Range(0, obj.housePosArray.Count);
                 int k = Random.Range(0, obj.housePosArray.Count);
-                if (obj.posToHouse[obj.housePosArray[k]].GetComponent<House>().owner != User.instance.owner && i != k)
+                if (obj.posToHouse[obj.housePosArray[k]].GetComponent<House>().owner != Global.instance.owner && i != k)
                 {
                     obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().JustAttack(obj.posToHouse[obj.housePosArray[k]]);
                     break;
@@ -40,7 +40,7 @@ public class Computer : MonoBehaviour
         {
             hitTimeOfUP = 0f;
             int i = Random.Range(0, obj.housePosArray.Count);
-            if (obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().owner == User.instance.owner) return;
+            if (obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().owner == Global.instance.owner) return;
             var obj2 = obj.posToHouse[obj.housePosArray[i]].GetComponent<House>();
             if (obj2.lv < obj2.maxLv && obj2.value >= obj2.maxValue)
             {
