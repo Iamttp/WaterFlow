@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 
 /// 
-/// TODO 不同城堡间路径重合需解决
+/// TODO 不同城堡间路径重合需解决 （一定概率，城堡在道路边，影响视角）(极小概率出现，两张图)
 /// TODO 局域网 
 /// TODO 粒子特效 
 /// TODO 士兵间碰撞 （现在未考虑士兵碰撞）
@@ -166,9 +166,18 @@ public class Scene : MonoBehaviour
             }
         }
         if (isReverse) path.Reverse();
-        for (int i = 3; i < path.Count - 3; i++)
-            if (table[path[i].x, path[i].y].type == 1 || table[path[i].x, path[i].y].type == 2)
-                return false;
+
+        // 两条道路间周围存在道路或者城堡，返回false
+        for (int i = 4; i < path.Count - 4; i++)
+            for (int offsetY = -sizeOfVis / 2; offsetY <= sizeOfVis / 2; offsetY++)
+                for (int offsetX = -sizeOfVis / 2; offsetX <= sizeOfVis / 2; offsetX++)
+                {
+                    int newX = offsetX + path[i].x;
+                    int newY = offsetY + path[i].y;
+                    if (table[newX, newY].type == 1 || table[newX, newY].type == 2)
+                        return false;
+                }
+
         for (int i = 0; i < path.Count; i++)
         {
             Vector2Int pos = path[i];
@@ -193,6 +202,7 @@ public class Scene : MonoBehaviour
                     }
                     else
                     {
+                        Debug.Log("warning map road");
                         houseRoadPath[i, k] = null;
                     }
                 }
@@ -258,9 +268,8 @@ public class Scene : MonoBehaviour
     private IEnumerator GameEnd()
     {
         yield return new WaitForSeconds(3);
-        show.enabled = false; 
-        Global.instance.DataInit();
-        SceneManager.LoadScene(1);
+        show.enabled = false;
+        restart();
     }
 
     private IEnumerator GameNEXT()
@@ -269,9 +278,13 @@ public class Scene : MonoBehaviour
         show.enabled = false;
         Global.instance.timeOfAttack /= 2.0f;
         Global.instance.timeOfUP /= 2.0f;
-        ++Global.instance.lev;
-        Global.instance.flag = false;
-        SceneManager.LoadScene(1);
+        if (++Global.instance.lev == 5) // TODO
+            SceneManager.LoadScene(3);
+        else
+        {
+            Global.instance.flag = false;
+            SceneManager.LoadScene(1);
+        }
     }
 
     void Update()
@@ -280,7 +293,7 @@ public class Scene : MonoBehaviour
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
-             houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
+            houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
             if (houseOfOwner[i] == Global.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
         }

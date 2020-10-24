@@ -40,16 +40,27 @@ public class Soldier : MonoBehaviour
                         if (Global.instance.buffOfAttack >= Random.value)
                         {
                             script.value -= 2;
+                            Global.instance.killS += 2;
                             Debug.Log("deep attack");
                         }
-                        else script.value--;
+                        else
+                        {
+                            Global.instance.killS++;
+                            script.value--;
+                        }
                     }
-                    else script.value--;
+                    else
+                    {
+                        script.value--;
+                        if (script.owner == Global.instance.owner) Global.instance.lostS++;
+                    }
                     if (script.value <= 0)
                     {
                         if (script.owner == Global.instance.owner || owner == Global.instance.owner)
                         {
                             Effect.instance.shake();
+                            if (owner == Global.instance.owner) Global.instance.killCas++;
+                            if (script.owner == Global.instance.owner) Global.instance.lostCas++;
                         }
                         script.owner = owner;
                         script.lv = 1;

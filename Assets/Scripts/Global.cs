@@ -42,8 +42,21 @@ public class Global : MonoBehaviour
     public List<node> ls;
     public Dictionary<string, node> mp;
 
+    // 游戏记录
+    public float useTime;
+    public int killCas;
+    public int lostCas;
+    public int killS;
+    public int lostS;
+
     public void DataInit()
     {
+        useTime = 0;
+        killCas = 0;
+        lostCas = 0;
+        killS = 0;
+        lostS = 0;
+
         lev = 1;
         flag = false;
         isStop = false;
