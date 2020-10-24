@@ -21,7 +21,6 @@ public class House : MonoBehaviour
 
     public void initHouse()
     {
-        lv = 1;
         value = 0;
         if (owner == Global.instance.owner)
         {
@@ -40,6 +39,7 @@ public class House : MonoBehaviour
 
     void Start()
     {
+        lv = 1;
         initHouse();
     }
 
@@ -123,8 +123,8 @@ public class House : MonoBehaviour
             {
                 if (GUI.Button(new Rect(mPoint.x, mPoint.y + 50, 60, 50), "UP"))
                 {
-                    value -= maxValue;
-                    maxValue = ++lv * perValue;
+                    lv++;
+                    initHouse();
                 }
             }
         }

@@ -11,26 +11,30 @@ public class Tech : MonoBehaviour
 
     public void attackFunc()
     {
-        Global.instance.mp["attack"].lv += 1f;
-        Global.instance.buffOfAttack = Mathf.RoundToInt(Global.instance.mp["attack"].lv); // TODO
+        Global.instance.mp["attack"].lv++;
+        Global.instance.mp["attack"].value += 0.15f;
+        Global.instance.buffOfAttack = Global.instance.mp["attack"].value;
         SceneManager.LoadScene(2);
     }
     public void moveSpeedFunc()
     {
-        Global.instance.mp["moveSpeed"].lv += 1f;
-        Global.instance.buffOfMoveSpeed = Global.instance.mp["moveSpeed"].lv;
+        Global.instance.mp["moveSpeed"].lv++;
+        Global.instance.mp["moveSpeed"].value += 0.3f;
+        Global.instance.buffOfMoveSpeed = Global.instance.mp["moveSpeed"].value;
         SceneManager.LoadScene(2);
     }
     public void addSpeedFunc()
     {
-        Global.instance.mp["addSpeed"].lv += 1f;
-        Global.instance.buffOfAddSpeed = Global.instance.mp["addSpeed"].lv;
+        Global.instance.mp["addSpeed"].lv++;
+        Global.instance.mp["addSpeed"].value += 0.15f;
+        Global.instance.buffOfAddSpeed = Global.instance.mp["addSpeed"].value;
         SceneManager.LoadScene(2);
     }
     public void sizeFunc()
     {
-        Global.instance.mp["size"].lv += 1f;
-        Global.instance.buffOfSize = Global.instance.mp["size"].lv;
+        Global.instance.mp["size"].lv++;
+        Global.instance.mp["size"].value += 0.15f;
+        Global.instance.buffOfSize = Global.instance.mp["size"].value;
         SceneManager.LoadScene(2);
     }
 
@@ -50,7 +54,7 @@ public class Tech : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            texts[i].text = Global.instance.ls[i].content + "\n当前等级：" + (Mathf.RoundToInt(Global.instance.ls[i].lv));
+            texts[i].text = Global.instance.ls[i].content + "\n当前等级：" + Global.instance.ls[i].lv;
             if (Global.instance.ls[i].name == "attack") buttons[i].onClick.AddListener(attackFunc);
             else if (Global.instance.ls[i].name == "moveSpeed") buttons[i].onClick.AddListener(moveSpeedFunc);
             else if (Global.instance.ls[i].name == "addSpeed") buttons[i].onClick.AddListener(addSpeedFunc);

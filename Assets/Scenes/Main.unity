@@ -634,7 +634,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1126,7 +1126,6 @@ MonoBehaviour:
   - {r: 0.9528302, g: 0.0764062, b: 0.94537675, a: 1}
   - {r: 0.4484298, g: 0.9716981, b: 0.05958529, a: 1}
   housePosArray: []
-  isStop: 0
 --- !u!4 &1711564578
 Transform:
   m_ObjectHideFlags: 0

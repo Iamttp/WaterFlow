@@ -35,7 +35,15 @@ public class Soldier : MonoBehaviour
                 var script = dstHouse.GetComponent<House>();
                 if (script.owner != owner)
                 {
-                    if (owner == Global.instance.owner) script.value -= Global.instance.buffOfAttack;
+                    if (owner == Global.instance.owner)
+                    {
+                        if (Global.instance.buffOfAttack >= Random.value)
+                        {
+                            script.value -= 2;
+                            Debug.Log("deep attack");
+                        }
+                        else script.value--;
+                    }
                     else script.value--;
                     if (script.value <= 0)
                     {
@@ -44,6 +52,7 @@ public class Soldier : MonoBehaviour
                             Effect.instance.shake();
                         }
                         script.owner = owner;
+                        script.lv = 1;
                         script.initHouse();
                     }
                 }

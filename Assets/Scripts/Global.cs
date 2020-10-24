@@ -5,7 +5,7 @@ using UnityEngine;
 public class Global : MonoBehaviour
 {
     public static Global instance;
-    
+
     public int fps;
 
     public int lev;
@@ -18,7 +18,7 @@ public class Global : MonoBehaviour
 
     // 玩家参数
     public int owner; // 记住 不可在DataInit重置
-    public int buffOfAttack; // 默认为1，表示进攻时一个士兵抵消一点防御
+    public float buffOfAttack; // 默认为0，表示进攻时多大概率一个士兵抵消两点防御
     public float buffOfMoveSpeed; // 默认为1，表示移动速度比率
     public float buffOfAddSpeed; // 默认为1，表示城堡人口增加速度比率
     public float buffOfSize; // 默认为1，表示城堡容量比率
@@ -28,12 +28,14 @@ public class Global : MonoBehaviour
     {
         public string name;
         public string content;
-        public float lv;
+        public float value;
+        public int lv;
 
-        public node(string name, string content, float lv = 1.0f)
+        public node(string name, string content, float value, int lv = 1)
         {
             this.name = name;
             this.content = content;
+            this.value = value;
             this.lv = lv;
         }
     }
@@ -48,25 +50,25 @@ public class Global : MonoBehaviour
 
         timeOfAttack = 1f;
         timeOfUP = 2f;
-        
-        buffOfAttack = 1;
+
+        buffOfAttack = 0;
         buffOfMoveSpeed = 1;
         buffOfAddSpeed = 1;
         buffOfSize = 1;
 
         ls = new List<node>();
         mp = new Dictionary<string, node>();
-        ls.Add(new node("attack", "士兵攻击力增加100%"));
-        ls.Add(new node("moveSpeed", "士兵移动速度增加100%"));
-        ls.Add(new node("addSpeed", "城堡士兵增加速度100%"));
-        ls.Add(new node("size", "城堡容量大小增加100%"));
+        ls.Add(new node("attack", "士兵双倍攻击力几率增加15%", buffOfAttack));
+        ls.Add(new node("moveSpeed", "士兵移动速度增加30%", buffOfMoveSpeed));
+        ls.Add(new node("addSpeed", "城堡士兵增加速度15%", buffOfAddSpeed));
+        ls.Add(new node("size", "城堡容量大小增加15%", buffOfSize));
         mp["attack"] = ls[0];
         mp["moveSpeed"] = ls[1];
         mp["addSpeed"] = ls[2];
         mp["size"] = ls[3];
     }
 
-    public void swap(int a,int b)
+    public void swap(int a, int b)
     {
         node temp = ls[a];
         ls[a] = ls[b];
@@ -75,7 +77,7 @@ public class Global : MonoBehaviour
 
     void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             DontDestroyOnLoad(gameObject);
             instance = this;
