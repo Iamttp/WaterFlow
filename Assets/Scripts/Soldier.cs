@@ -41,6 +41,7 @@ public class Soldier : MonoBehaviour
                         {
                             script.value -= 2;
                             Global.instance.killS += 2;
+                            Effect.instance.red(script);
                             Debug.Log("deep attack");
                         }
                         else

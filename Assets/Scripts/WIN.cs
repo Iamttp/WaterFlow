@@ -9,7 +9,7 @@ public class WIN : MonoBehaviour
     void Start()
     {
         text.text = "YOU WIN !" +
-            "\nUse Time : " + Global.instance.useTime + "s" +
+            "\nUse Time : " + (int)(Global.instance.useTime) + "s" +
             "\nSiege Cities ： " + Global.instance.killCas +
             "\nLost Cities ： " + Global.instance.lostCas +
             "\nKill Soldiers ： " + Global.instance.killS +

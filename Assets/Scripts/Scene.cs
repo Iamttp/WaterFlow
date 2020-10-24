@@ -278,7 +278,7 @@ public class Scene : MonoBehaviour
         show.enabled = false;
         Global.instance.timeOfAttack /= 2.0f;
         Global.instance.timeOfUP /= 2.0f;
-        if (++Global.instance.lev == 5) // TODO
+        if (++Global.instance.lev == 6)
             SceneManager.LoadScene(3);
         else
         {

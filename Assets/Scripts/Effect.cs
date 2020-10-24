@@ -7,7 +7,11 @@ public class Effect : MonoBehaviour
     public static Effect instance;
 
     private Vector3 lastPos;
+    private Color lastColor;
+
     private int timeOfShake = 0;
+    private int timeOfRed = 0;
+
     void Start()
     {
         instance = this;
@@ -27,8 +31,7 @@ public class Effect : MonoBehaviour
         dirVector3.y = Mathf.Sin(Time.time) * Random.Range(0, 3);
         dirVector3.x = Mathf.Cos(Time.time) * Random.Range(0, 3);
         Camera.main.transform.position = lastPos + dirVector3;
-        timeOfShake++;
-        if (timeOfShake == 10)
+        if (++timeOfShake == 5)
         {
             timeOfShake = 0;
             Camera.main.transform.position = lastPos;
@@ -45,6 +48,32 @@ public class Effect : MonoBehaviour
         {
             lastPos = Camera.main.transform.position;
             StartCoroutine(shakeEffect());
+        }
+    }
+
+    public IEnumerator redEffect(House h)
+    {
+        Global.instance.isStop = true;
+        yield return new WaitForSeconds(0.05f);
+
+        h.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(Random.value, Random.value, Random.value));
+        if (++timeOfRed == 5)
+        {
+            timeOfRed = 0;
+            h.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", lastColor);
+            Global.instance.isStop = false;
+        }
+        else
+            StartCoroutine(redEffect(h));
+    }
+
+    public void red(House h)
+    {
+        if (timeOfRed != 0) timeOfRed = 0;
+        else
+        {
+            lastColor = h.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+            StartCoroutine(redEffect(h));
         }
     }
 }
