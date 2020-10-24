@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,5 +149,6 @@ MonoBehaviour:
   - {x: 48, y: 40}
   now: 0
   basePos: {x: 15.007044, y: 32.990807, z: 0.4883101}
+  srcHouseScript: {fileID: 0}
   dstHouse: {fileID: 0}
   owner: 1
