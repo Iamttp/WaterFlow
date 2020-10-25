@@ -39,9 +39,10 @@ public class Touch : MonoBehaviour
                 if (Physics.Raycast(myCamera.ScreenPointToRay(Input.mousePosition), out hit, 500f))
                 {
                     GameObject obj = hit.collider.gameObject;
+                    var script = obj.GetComponent<House>();
                     if (obj.name == "house(Clone)")
                     {
-                        if (!isSelect)
+                        if (!isSelect && Scene.instance.fogVis[script.pos.x, script.pos.y])
                         {
                             Global.instance.isStop = true;
                             panel.SetActive(true);
@@ -57,12 +58,13 @@ public class Touch : MonoBehaviour
                             Global.instance.isStop = false;
                             isSelect = false;
                             panel.SetActive(false);
-                            if (lastObj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
-                            {
-                                obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);
-                                obj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
-                                lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
-                            }
+                            if (lastObj.GetComponent<House>() != null)
+                                if (lastObj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                {
+                                    obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);
+                                    obj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                                    lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                                }
                         }
                     }
                     else
@@ -80,7 +82,6 @@ public class Touch : MonoBehaviour
         }
     }
 
-    string[] strs = new string[] { "BLUE", "RED", "PINK", "GREEN" };
     void houseInfo(GameObject obj)
     {
         var script = obj.GetComponent<House>();

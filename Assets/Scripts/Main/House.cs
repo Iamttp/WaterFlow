@@ -26,6 +26,9 @@ public class House : MonoBehaviour
 
     private float timeUse;
 
+    public Vector2Int pos;
+    public int fogSize;             // 士兵侦察半径
+
     public void initHouse()
     {
         value = 0;
@@ -50,6 +53,7 @@ public class House : MonoBehaviour
 
     void Start()
     {
+        fogSize = 5;
         lv = 1;
         initHouse();
     }
@@ -63,6 +67,23 @@ public class House : MonoBehaviour
             timeUse = timeDisOfAdd;
             if (value < maxValue) value++;
             else if (value > maxValue) value--;
+
+            if (owner == Global.instance.owner) // fog
+            {
+                int width = Scene.instance.width;
+                int height = Scene.instance.height;
+                for (int i = -fogSize; i <= fogSize; i++)
+                    for (int j = -fogSize; j <= fogSize; j++)
+                        if (i * i + j * j <= fogSize * fogSize)
+                        {
+                            int newX = pos.x + i;
+                            int newY = pos.y + j;
+                            if (newX >= 0 && newX < width && newY >= 0 && newY < height)
+                            {
+                                Scene.instance.fogVis[newX, newY] = true;
+                            }
+                        }
+            }
         }
     }
 
@@ -131,6 +152,8 @@ public class House : MonoBehaviour
     GUIStyle style = new GUIStyle();
     private void OnGUI()
     {
+        if (!Scene.instance.fogVis[pos.x, pos.y]) return;
+
         style.fontSize = 45;
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);

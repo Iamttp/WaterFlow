@@ -7,11 +7,10 @@ using UnityEngine.UI;
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 
 /// 
-/// TODO 不同城堡间路径重合需解决 （一定概率，城堡在道路边，影响视角）(极小概率出现，两张图)
+/// TODO 不同城堡间路径重合需解决 （一定概率，城堡在道路边，影响视角）
 /// TODO 局域网 
 /// TODO 粒子特效 
 /// TODO 士兵间碰撞 （现在未考虑士兵碰撞）
-/// TODO 手机双指操作优化 
 /// TODO 兵力显示（现在为城堡数显示）
 /// 
 /// 选择颜色，开始游戏
@@ -20,7 +19,7 @@ using UnityEngine.UI;
 /// 失去城堡，游戏失败
 /// 
 /// WASD / 单指拖动 -> 移动视角
-/// 鼠标滚轮 / 双指(单指不动) -> 缩放视角
+/// 鼠标滚轮 / 双指 / 滑动条 -> 缩放视角
 /// 鼠标左键 / 单指点击 -> 选择
 /// </summary>
 public class Scene : MonoBehaviour
@@ -31,6 +30,7 @@ public class Scene : MonoBehaviour
     public GameObject house;
     public GameObject stop;
     public GameObject go;
+    public GameObject fog;
     public Text level;
     public Text show;
     public Text stopButton;
@@ -51,10 +51,12 @@ public class Scene : MonoBehaviour
     };
 
     private node[,] table;
+    public bool[,] fogVis;
     private bool[,] visTable; // 防止太密集
 
     public List<Vector2Int> housePosArray;
     public Dictionary<Vector2Int, GameObject> posToHouse;
+    public Dictionary<Vector2Int, GameObject> posToFog;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
 
@@ -86,9 +88,11 @@ public class Scene : MonoBehaviour
     {
         housePosArray = new List<Vector2Int>();
         table = new node[width, height];
+        fogVis = new bool[width, height];
         visTable = new bool[width, height];
         g = new int[sizeOfHouse, sizeOfHouse];
         posToHouse = new Dictionary<Vector2Int, GameObject>();
+        posToFog = new Dictionary<Vector2Int, GameObject>();
         houseOfOwner = new int[Scene.instance.sizeOfHouse];
 
         // 0 stop 1 go 2 house 四个角的house数相同
@@ -270,15 +274,22 @@ public class Scene : MonoBehaviour
                     case 0:
                         stop.transform.localScale = new Vector3(allScale, allScale, 1);
                         Instantiate(stop, stop.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
+
+                        fog.transform.localScale = new Vector3(allScale, allScale, 10);
+                        posToFog[new Vector2Int(i, j)] = Instantiate(fog, fog.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
                         break;
                     case 1:
                         go.transform.localScale = new Vector3(allScale, allScale, 1);
                         Instantiate(go, go.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
+
+                        fog.transform.localScale = new Vector3(allScale, allScale, 10);
+                        posToFog[new Vector2Int(i, j)] = Instantiate(fog, fog.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
                         break;
                     case 2:
                         house.transform.localScale = new Vector3(allScale, allScale, 1);
                         house.GetComponent<House>().index = table[i, j].indexOfArray;
                         house.GetComponent<House>().owner = houseOfOwner[table[i, j].indexOfArray];
+                        house.GetComponent<House>().pos = new Vector2Int(i, j);
                         posToHouse[new Vector2Int(i, j)] = Instantiate(house, house.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
                         break;
                 }
@@ -320,6 +331,7 @@ public class Scene : MonoBehaviour
         if (Global.instance.isStop) stopButton.text = "START";
         else stopButton.text = "STOP";
         if (Global.instance.isStop) return;
+        if (Global.instance.flag) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
@@ -327,7 +339,6 @@ public class Scene : MonoBehaviour
             if (houseOfOwner[i] == Global.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
         }
-        if (Global.instance.flag) return;
         if (num == housePosArray.Count)
         {
             // 游戏胜利 下一关
@@ -344,6 +355,13 @@ public class Scene : MonoBehaviour
             show.text = "GAME OVER";
             StartCoroutine(GameEnd());
         }
+
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+            {
+                if (posToFog.ContainsKey(new Vector2Int(i, j)))
+                    posToFog[new Vector2Int(i, j)].SetActive(!fogVis[i, j]); // TODO
+            }
     }
 
 

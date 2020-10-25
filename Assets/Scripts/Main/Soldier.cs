@@ -13,10 +13,12 @@ public class Soldier : MonoBehaviour
 
     public float attackRate;
     public float timeDisOfMove;
+    public int fogSize;             // 士兵侦察半径
     private float timeUse;          // 行走间隔 House.timeDisOfMove
 
     void Start()
     {
+        fogSize = 2;
         timeUse = timeDisOfMove;
         gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
     }
@@ -29,6 +31,24 @@ public class Soldier : MonoBehaviour
         {
             timeUse = timeDisOfMove;
             transform.position = new Vector3(path[now].x * Scene.instance.allScale, path[now].y * Scene.instance.allScale, basePos.z + 1);
+
+            if (owner == Global.instance.owner) // fog
+            {
+                int width = Scene.instance.width;
+                int height = Scene.instance.height;
+                for (int i = -fogSize; i <= fogSize; i++)
+                    for (int j = -fogSize; j <= fogSize; j++)
+                        if (i * i + j * j <= fogSize * fogSize)
+                        {
+                            int newX = path[now].x + i;
+                            int newY = path[now].y + j;
+                            if (newX >= 0 && newX < width && newY >= 0 && newY < height)
+                            {
+                                Scene.instance.fogVis[newX, newY] = true;
+                            }
+                        }
+            }
+
             now++;
             if (now >= path.Count)
             {
