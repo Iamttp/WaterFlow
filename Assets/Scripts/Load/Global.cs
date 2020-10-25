@@ -49,6 +49,10 @@ public class Global : MonoBehaviour
     public int killS;
     public int lostS;
 
+    // 特效开关
+    public bool isShakeOpen;
+    public bool isDeepOpen;
+
     public void DataInit()
     {
         useTime = 0;
@@ -96,10 +100,22 @@ public class Global : MonoBehaviour
             instance = this;
             DataInit();
             Application.targetFrameRate = fps;
+            isShakeOpen = true;
+            isDeepOpen = true;
         }
     }
 
     void Update()
     {
+    }
+
+    public void clickIsDeep()
+    {
+        isShakeOpen = !isShakeOpen;
+    }
+
+    public void clickIsShake()
+    {
+        isDeepOpen = !isDeepOpen;
     }
 }

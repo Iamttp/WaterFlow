@@ -25,13 +25,13 @@ public class Effect : MonoBehaviour
     private IEnumerator shakeEffect()
     {
         Global.instance.isStop = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
 
         Vector3 dirVector3 = Vector3.zero;
         dirVector3.y = Mathf.Sin(Time.time) * Random.Range(0, 3);
         dirVector3.x = Mathf.Cos(Time.time) * Random.Range(0, 3);
         Camera.main.transform.position = lastPos + dirVector3;
-        if (++timeOfShake == 5)
+        if (++timeOfShake == 3)
         {
             timeOfShake = 0;
             Camera.main.transform.position = lastPos;
@@ -43,6 +43,7 @@ public class Effect : MonoBehaviour
 
     public void shake()
     {
+        if (!Global.instance.isShakeOpen) return;
         if (timeOfShake != 0) timeOfShake = 0; // 当前正在抖动，重置抖动
         else
         {
@@ -57,7 +58,7 @@ public class Effect : MonoBehaviour
         yield return new WaitForSeconds(0.05f);
 
         h.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(Random.value, Random.value, Random.value));
-        if (++timeOfRed == 5)
+        if (++timeOfRed == 3)
         {
             timeOfRed = 0;
             h.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", lastColor);
@@ -69,6 +70,7 @@ public class Effect : MonoBehaviour
 
     public void red(House h)
     {
+        if (!Global.instance.isDeepOpen) return;
         if (timeOfRed != 0) timeOfRed = 0;
         else
         {
