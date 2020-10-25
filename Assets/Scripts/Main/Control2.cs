@@ -1,13 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Control2 : MonoBehaviour
 {
+    public static Control2 instance;
+
+    public Slider slider;
+    public static int maxOrt = 30;
+    public static int minOrt = 3;
+
     float lastDis;
+
+    private void Awake()
+    {
+        instance = this;
+        Input.multiTouchEnabled = true;//开启多点触碰
+    }
+
     void Start()
     {
-        Input.multiTouchEnabled = true;//开启多点触碰
     }
 
     void Update()
@@ -28,21 +41,28 @@ public class Control2 : MonoBehaviour
             touch0 = Input.GetTouch(0).position;
             touch1 = Input.GetTouch(1).position;
             distance = Vector2.Distance(touch0, touch1);
-            if(distance > lastDis)
+            if (distance > lastDis)
             {
                 if (Camera.main.fieldOfView > 2)
                     Camera.main.fieldOfView -= 2;
                 if (Camera.main.orthographicSize >= 1)
                     Camera.main.orthographicSize -= 0.5F;
+                slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
             }
-            else
+            else if (distance < lastDis)
             {
                 if (Camera.main.fieldOfView <= 100)
                     Camera.main.fieldOfView += 2;
                 if (Camera.main.orthographicSize <= 50)
                     Camera.main.orthographicSize += 0.5F;
+                slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
             }
             lastDis = distance;
         }
+    }
+
+    public void sliderControl()
+    {
+        Camera.main.orthographicSize = slider.value * (maxOrt - minOrt) + minOrt;
     }
 }

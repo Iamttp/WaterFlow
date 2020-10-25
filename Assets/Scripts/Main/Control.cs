@@ -1,12 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Control : MonoBehaviour
 {
+    public Slider slider;
+    public static int maxOrt;
+    public static int minOrt;
+
     void Start()
     {
-
+        slider = Control2.instance.slider;
+        maxOrt = Control2.maxOrt;
+        minOrt = Control2.minOrt;
     }
 
     void Update()
@@ -18,6 +25,7 @@ public class Control : MonoBehaviour
                 Camera.main.fieldOfView += 2;
             if (Camera.main.orthographicSize <= 50)
                 Camera.main.orthographicSize += 0.5F;
+            slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
         }
         //Zoom in
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -26,6 +34,7 @@ public class Control : MonoBehaviour
                 Camera.main.fieldOfView -= 2;
             if (Camera.main.orthographicSize >= 1)
                 Camera.main.orthographicSize -= 0.5F;
+            slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
         }
 
         //移动
@@ -34,25 +43,25 @@ public class Control : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift)) dirVector3.y = 3;
             else dirVector3.y = 1;
-            Camera.main.transform.position += dirVector3 * 0.1f;
+            Camera.main.transform.position += dirVector3 * 0.2f;
         }
         if (Input.GetKey(KeyCode.S))
         {
             if (Input.GetKey(KeyCode.LeftShift)) dirVector3.y = -3;
             else dirVector3.y = -1;
-            Camera.main.transform.position += dirVector3 * 0.1f;
+            Camera.main.transform.position += dirVector3 * 0.2f;
         }
         if (Input.GetKey(KeyCode.A))
         {
             if (Input.GetKey(KeyCode.LeftShift)) dirVector3.x = 3;
             else dirVector3.x = 1;
-            Camera.main.transform.position += dirVector3 * 0.1f;
+            Camera.main.transform.position += dirVector3 * 0.2f;
         }
         if (Input.GetKey(KeyCode.D))
         {
             if (Input.GetKey(KeyCode.LeftShift)) dirVector3.x = -3;
             else dirVector3.x = -1;
-            Camera.main.transform.position += dirVector3 * 0.1f;
+            Camera.main.transform.position += dirVector3 * 0.2f;
         }
     }
 }

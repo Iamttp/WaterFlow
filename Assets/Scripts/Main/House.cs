@@ -57,15 +57,20 @@ public class House : MonoBehaviour
 
     void OnTouched()
     {
+        Color temp;
         for (int k = 0; k < Scene.instance.sizeOfHouse; k++)
             if (Scene.instance.g[index, k] != 0)
             {
                 GameObject obj = Scene.instance.posToHouse[Scene.instance.housePosArray[k]];
+                temp = obj.GetComponent<MeshRenderer>().material.GetColor("_Color");
                 obj.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
                 obj.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 10);
+                obj.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
             }
+        temp = gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
         gameObject.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
         gameObject.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 2);
+        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
     }
 
     void UnTouched()
