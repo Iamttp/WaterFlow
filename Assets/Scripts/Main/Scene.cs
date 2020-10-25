@@ -84,7 +84,7 @@ public class Scene : MonoBehaviour
         return true;
     }
 
-    void initHouseData()
+    bool initHouseData()
     {
         housePosArray = new List<Vector2Int>();
         table = new node[width, height];
@@ -96,6 +96,7 @@ public class Scene : MonoBehaviour
         houseOfOwner = new int[Scene.instance.sizeOfHouse];
 
         // 0 stop 1 go 2 house 四个角的house数相同
+        int allowTry = 100;
         int[] offsetX = new int[] { 0, width >> 1, width >> 1, 0 };
         int[] offsetY = new int[] { 0, height >> 1, 0, height >> 1 };
         for (int i = 0; i < sizeOfHouse; i++)
@@ -108,9 +109,16 @@ public class Scene : MonoBehaviour
             if (!placeHouse(new Vector2Int(x, y)))
             {
                 i--;
+                if (allowTry-- <= 0)
+                {
+                    Debug.Log("house error restart");
+                    SceneManager.LoadScene(2);
+                    return false;
+                }
                 continue;
             }
         }
+        return true;
     }
 
     /// <summary>
@@ -259,9 +267,15 @@ public class Scene : MonoBehaviour
     void Awake()
     {
         instance = this;
-        Screen.SetResolution(1920, 1080, false);
-        initHouseData();
-        initRoadData();
+        Screen.SetResolution(1920, 1080, true);
+        width = Global.instance.width;
+        height = Global.instance.height;
+        sizeOfHouse = Global.instance.sizeOfHouse;
+        var i = Load.index2;
+        Camera.main.transform.position = new Vector3(Load.camX[i], Load.camY[i], 150);
+        Camera.main.orthographicSize = Load.camSize[i];
+        if (initHouseData())
+            initRoadData();
     }
 
     void renderScene()
@@ -376,5 +390,11 @@ public class Scene : MonoBehaviour
         Global.instance.isStop = !Global.instance.isStop;
         if (Global.instance.isStop) stopButton.text = "START";
         else stopButton.text = "STOP";
+    }
+
+    public void backFun()
+    {
+        Global.instance.DataInit();
+        SceneManager.LoadScene(0);
     }
 }

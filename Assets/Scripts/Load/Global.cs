@@ -53,6 +53,10 @@ public class Global : MonoBehaviour
     public bool isShakeOpen;
     public bool isDeepOpen;
 
+    public int width;
+    public int height;
+    public int sizeOfHouse;
+
     public void DataInit()
     {
         useTime = 0;

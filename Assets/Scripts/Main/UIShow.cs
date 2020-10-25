@@ -19,14 +19,13 @@ public class UIShow : MonoBehaviour
         scene = Scene.instance;
         len = scene.housePosArray.Count;
         gameObjects = new GameObject[len];
-        float x = 0.9f;
         for (int i = 0; i < len; i++)
         {
             gameObjects[i] = Instantiate(cube, transform);
-            gameObjects[i].transform.localScale = new Vector3(x, x, x);
-            gameObjects[i].transform.position += new Vector3((i - len / 2) * x, 0, 0);
+            gameObjects[i].transform.position += new Vector3(i - len / 2, 0, 0);
         }
         StaticBatchingUtility.Combine(gameObject); // 静态批处理
+        transform.localScale = new Vector3(Load.camShowScale[Load.index1], 1, 1);
     }
 
     void Update()
