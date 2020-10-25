@@ -19,7 +19,7 @@ public class Tech : MonoBehaviour
     public void moveSpeedFunc()
     {
         Global.instance.mp["moveSpeed"].lv++;
-        Global.instance.mp["moveSpeed"].value += 0.3f;
+        Global.instance.mp["moveSpeed"].value += 0.5f;
         Global.instance.buffOfMoveSpeed = Global.instance.mp["moveSpeed"].value;
         SceneManager.LoadScene(2);
     }
@@ -33,7 +33,7 @@ public class Tech : MonoBehaviour
     public void sizeFunc()
     {
         Global.instance.mp["size"].lv++;
-        Global.instance.mp["size"].value += 0.15f;
+        Global.instance.mp["size"].value += 0.2f;
         Global.instance.buffOfSize = Global.instance.mp["size"].value;
         SceneManager.LoadScene(2);
     }

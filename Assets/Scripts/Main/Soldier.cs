@@ -11,13 +11,13 @@ public class Soldier : MonoBehaviour
     public GameObject dstHouse;
     public int owner;
 
-    private float disOfMove;
+    public float attackRate;
+    public float timeDisOfMove;
     private float timeUse;          // 行走间隔 House.timeDisOfMove
 
     void Start()
     {
-        disOfMove = srcHouseScript.timeDisOfMove;
-        timeUse = disOfMove;
+        timeUse = timeDisOfMove;
         gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
     }
 
@@ -27,7 +27,7 @@ public class Soldier : MonoBehaviour
         timeUse -= Time.deltaTime;
         if (timeUse < 0)
         {
-            timeUse = disOfMove;
+            timeUse = timeDisOfMove;
             transform.position = new Vector3(path[now].x * Scene.instance.allScale, path[now].y * Scene.instance.allScale, basePos.z + 1);
             now++;
             if (now >= path.Count)
@@ -35,24 +35,17 @@ public class Soldier : MonoBehaviour
                 var script = dstHouse.GetComponent<House>();
                 if (script.owner != owner)
                 {
-                    if (owner == Global.instance.owner)
+                    if (attackRate >= Random.value)
                     {
-                        if (Global.instance.buffOfAttack >= Random.value)
-                        {
-                            script.value -= 2;
-                            Global.instance.killS += 2;
-                            Effect.instance.red(script);
-                            Debug.Log("deep attack");
-                        }
-                        else
-                        {
-                            Global.instance.killS++;
-                            script.value--;
-                        }
+                        script.value -= 2;
+                        if (owner == Global.instance.owner) Global.instance.killS += 2;
+                        if (script.owner == Global.instance.owner) Global.instance.lostS += 2;
+                        Effect.instance.red(script);
                     }
                     else
                     {
                         script.value--;
+                        if (owner == Global.instance.owner) Global.instance.killS++;
                         if (script.owner == Global.instance.owner) Global.instance.lostS++;
                     }
                     if (script.value <= 0)

@@ -1,20 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 管理鼠标点击选中
 /// </summary>
 public class Touch : MonoBehaviour
 {
+    [Header("House Panel")]
+    public GameObject panel;
+    public Text lvText;
+    public Text sizeText;
+    public Text addText;
+    public Text moveText;
+    public Text attackText;
+
     public Camera myCamera;
     private float hitTime = 0f;
-    public bool isSelect;
+    public bool isSelect;       // 是否选择了我方城堡
     public GameObject lastObj;
 
     void Start()
     {
         lastObj = new GameObject();
+        panel.SetActive(false);
     }
 
     void Update()
@@ -33,39 +43,55 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect)
                         {
-                            if((obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1))
+                            Global.instance.isStop = true;
+                            panel.SetActive(true);
+                            houseInfo(obj);
+                            if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
                             {
-                                if (!isSelect) Global.instance.isStop = true;
                                 isSelect = true;
                                 obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
-                            }
-                            else
-                            {
-                                if (isSelect) Global.instance.isStop = false;
-                                isSelect = false;
-                                if (lastObj.name == "house(Clone)")
-                                    lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
                             }
                         }
                         else
                         {
-                            if (isSelect) Global.instance.isStop = false;
+                            Global.instance.isStop = false;
                             isSelect = false;
-                            obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);
-                            obj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
-                            lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                            panel.SetActive(false);
+                            if (lastObj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                            {
+                                obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);
+                                obj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                                lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                            }
                         }
                     }
                     else
                     {
-                        if(isSelect) Global.instance.isStop = false;
+                        Global.instance.isStop = false;
                         isSelect = false;
+                        panel.SetActive(false);
                         if (lastObj.name == "house(Clone)")
-                            lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
+                            if (lastObj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
                     }
                     lastObj = obj;
                 }
             }
         }
+    }
+
+    string[] strs = new string[] { "BLUE", "RED", "PINK", "GREEN" };
+    void houseInfo(GameObject obj)
+    {
+        var script = obj.GetComponent<House>();
+        lvText.text = "LV : " + script.lv;
+        addText.text = "士兵增加间隔 : " + script.timeDisOfAdd.ToString("f2") + "s";
+        moveText.text = "士兵移动间隔 : " + script.timeDisOfMove.ToString("f2") + "s";
+        sizeText.text = "士兵数 : " + script.value + " / " + script.maxValue;
+        attackText.text = "士兵暴击率 : " + Mathf.RoundToInt(script.attackRate * 100) + "%";
+
+        var tempColor = Scene.instance.colorTable[script.owner];
+        tempColor.a /= 3;
+        panel.GetComponent<Image>().color = tempColor;
     }
 }

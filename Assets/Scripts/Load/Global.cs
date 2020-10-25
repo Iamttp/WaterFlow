@@ -76,9 +76,9 @@ public class Global : MonoBehaviour
         ls = new List<node>();
         mp = new Dictionary<string, node>();
         ls.Add(new node("attack", "士兵双倍攻击力几率增加15%", buffOfAttack));
-        ls.Add(new node("moveSpeed", "士兵移动速度增加30%", buffOfMoveSpeed));
+        ls.Add(new node("moveSpeed", "士兵移动速度增加50%", buffOfMoveSpeed));
         ls.Add(new node("addSpeed", "城堡士兵增加速度15%", buffOfAddSpeed));
-        ls.Add(new node("size", "城堡容量大小增加15%", buffOfSize));
+        ls.Add(new node("size", "城堡容量大小增加20%", buffOfSize));
         mp["attack"] = ls[0];
         mp["moveSpeed"] = ls[1];
         mp["addSpeed"] = ls[2];

@@ -11,8 +11,15 @@ public class House : MonoBehaviour
     public int lv;                              // 等级
     public int maxLv;
     public int owner;
+
     public float timeDisOfAdd;    // 城堡生命值增加间隔
     public float timeDisOfMove;   // 士兵移动时间间隔
+
+    [Header("对应buff")]
+    public float sizeRate;        // 最大生命值比例
+    public float addRate;
+    public float moveRate;
+    public float attackRate;      // 暴击比例
 
     public GameObject player;                   // save player
     public int index;                           // houseArray index
@@ -24,17 +31,21 @@ public class House : MonoBehaviour
         value = 0;
         if (owner == Global.instance.owner)
         {
-            maxValue = Mathf.RoundToInt(lv * perValue * Global.instance.buffOfSize);
-            timeDisOfAdd /= Global.instance.buffOfAddSpeed;
-            timeDisOfMove /= Global.instance.buffOfMoveSpeed;
+            sizeRate = Global.instance.buffOfSize;
+            addRate = Global.instance.buffOfAddSpeed;
+            moveRate = Global.instance.buffOfMoveSpeed;
+            attackRate = Global.instance.buffOfAttack;
         }
         else
         {
-            maxValue = lv * perValue;
-            timeDisOfAdd = 0.9f;
-            timeDisOfMove = 0.1f;
+            sizeRate = 1;
+            addRate = 1;
+            moveRate = 1;
+            attackRate = 0;
         }
-        timeUse = timeDisOfAdd;
+        maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
+        timeDisOfAdd = 0.9f / addRate;
+        timeDisOfMove = 0.1f / moveRate;
     }
 
     void Start()
@@ -93,13 +104,15 @@ public class House : MonoBehaviour
 
         Soldier script = player.GetComponent<Soldier>();
         script.dstHouse = gameObject;
+        script.attackRate = lastObjScript.attackRate;
+        script.timeDisOfMove = lastObjScript.timeDisOfMove;
         script.path = Scene.instance.houseRoadPath[lastObjScript.index, index];
         if (script.path == null) yield break;
         script.basePos = lastObj.transform.position;
         script.now = 0;
         script.owner = lastObjScript.owner;
         script.srcHouseScript = lastObjScript;
-        Instantiate(player, transform.position, new Quaternion());
+        Instantiate(player, lastObjScript.transform.position, new Quaternion());
         lastObjScript.value--;
 
         yield return new WaitForSeconds(timeDisOfMove);
