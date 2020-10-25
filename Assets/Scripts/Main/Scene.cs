@@ -289,6 +289,8 @@ public class Scene : MonoBehaviour
 
     void Update()
     {
+        if (Global.instance.isStop) stopButton.text = "START";
+        else stopButton.text = "STOP";
         if (Global.instance.isStop) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)

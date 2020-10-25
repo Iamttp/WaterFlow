@@ -21,6 +21,7 @@ public class Control2 : MonoBehaviour
 
     void Start()
     {
+        slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
     }
 
     void Update()

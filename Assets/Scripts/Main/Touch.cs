@@ -19,7 +19,6 @@ public class Touch : MonoBehaviour
 
     void Update()
     {
-        if (Global.instance.isStop) return;
         hitTime += Time.deltaTime;
         if (hitTime > 0.2f)
         {
@@ -36,11 +35,13 @@ public class Touch : MonoBehaviour
                         {
                             if((obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1))
                             {
+                                if (!isSelect) Global.instance.isStop = true;
                                 isSelect = true;
                                 obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
                             }
                             else
                             {
+                                if (isSelect) Global.instance.isStop = false;
                                 isSelect = false;
                                 if (lastObj.name == "house(Clone)")
                                     lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
@@ -48,6 +49,7 @@ public class Touch : MonoBehaviour
                         }
                         else
                         {
+                            if (isSelect) Global.instance.isStop = false;
                             isSelect = false;
                             obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);
                             obj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
@@ -56,6 +58,7 @@ public class Touch : MonoBehaviour
                     }
                     else
                     {
+                        if(isSelect) Global.instance.isStop = false;
                         isSelect = false;
                         if (lastObj.name == "house(Clone)")
                             lastObj.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
