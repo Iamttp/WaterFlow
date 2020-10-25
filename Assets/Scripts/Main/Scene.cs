@@ -202,11 +202,12 @@ public class Scene : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("warning map road");
+                        //Debug.Log("warning map road");
                         houseRoadPath[i, k] = null;
                     }
                 }
 
+        // 排除出现存在城堡无道路连接的情况
         for (int i = 0; i < housePosArray.Count; i++)
         {
             bool isOK = false;
@@ -220,8 +221,35 @@ public class Scene : MonoBehaviour
             {
                 Debug.Log("map error restart");
                 SceneManager.LoadScene(2);
+                return;
             }
         }
+
+        // 排除出现多张图，每张图城堡数大于等于2的情况。
+        countDfs = 0;
+        visDfs = new bool[sizeOfHouse];
+        visDfs[0] = true;
+        dfs(0);
+        Debug.Log(countDfs);
+        if (countDfs != sizeOfHouse)
+        {
+            Debug.Log("map error restart");
+            SceneManager.LoadScene(2);
+            return;
+        }
+    }
+
+    int countDfs;
+    bool[] visDfs;
+    void dfs(int index)
+    {
+        countDfs++;
+        for (int i = 0; i < sizeOfHouse; i++)
+            if (i != index && houseRoadPath[i, index] != null && !visDfs[i])
+            {
+                visDfs[i] = true;
+                dfs(i);
+            }
     }
 
     void Awake()
