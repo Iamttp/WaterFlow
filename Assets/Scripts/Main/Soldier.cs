@@ -78,6 +78,7 @@ public class Soldier : MonoBehaviour
                         }
                         script.owner = owner;
                         script.lv = 1;
+                        script.value = 0;
                         script.initHouse();
                     }
                 }

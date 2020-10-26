@@ -9,6 +9,7 @@ public class Load : MonoBehaviour
     public Dropdown dropdownOfOwner;
     public Dropdown dropdownOfSize;
     public Dropdown dropdownOfCas;
+    public Dropdown dropdownOfDiff;
 
     public static int index1;
     public static int index2;
@@ -40,5 +41,6 @@ public class Load : MonoBehaviour
         index2 = dropdownOfSize.value;
         Global.instance.sizeOfHouse = casArray[dropdownOfCas.value];
         Global.instance.width = Global.instance.height = sizeArray[dropdownOfSize.value];
+        Global.instance.diff = dropdownOfDiff.value;
     }
 }

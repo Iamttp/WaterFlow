@@ -56,6 +56,7 @@ public class Global : MonoBehaviour
     public int width;
     public int height;
     public int sizeOfHouse;
+    public int diff;
 
     public void DataInit()
     {

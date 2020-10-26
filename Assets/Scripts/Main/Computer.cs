@@ -37,7 +37,7 @@ public class Computer : MonoBehaviour
         Global.instance.useTime += Time.deltaTime;
         int timeInt = (int)(Global.instance.useTime);
         text.text = sec3Hms(timeInt);
-        var obj = Scene.instance;
+        Scene obj = Scene.instance;
 
         hitTimeOfAttack += Time.deltaTime;
         if (hitTimeOfAttack > Global.instance.timeOfAttack)
@@ -61,12 +61,13 @@ public class Computer : MonoBehaviour
         {
             hitTimeOfUP = 0f;
             int i = Random.Range(0, obj.housePosArray.Count);
-            if (obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().owner == Global.instance.owner) return;
-            var obj2 = obj.posToHouse[obj.housePosArray[i]].GetComponent<House>();
+            House obj2 = obj.posToHouse[obj.housePosArray[i]].GetComponent<House>();
+            if (obj2.owner == Global.instance.owner) return;
             if (obj2.lv < obj2.maxLv && obj2.value >= obj2.maxValue)
             {
+                obj2.lv++;
                 obj2.value -= obj2.maxValue;
-                obj2.maxValue = ++obj2.lv * obj2.perValue;
+                obj2.initHouse();
             }
         }
     }

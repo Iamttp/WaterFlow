@@ -44,7 +44,7 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect && Scene.instance.fogVis[script.pos.x, script.pos.y])
                         {
-                            Global.instance.isStop = true;
+                            if(Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = true;
                             panel.SetActive(true);
                             houseInfo(obj);
                             if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
@@ -55,7 +55,7 @@ public class Touch : MonoBehaviour
                         }
                         else
                         {
-                            Global.instance.isStop = false;
+                            if(Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
                             isSelect = false;
                             panel.SetActive(false);
                             if (lastObj.GetComponent<House>() != null)
@@ -69,7 +69,7 @@ public class Touch : MonoBehaviour
                     }
                     else
                     {
-                        Global.instance.isStop = false;
+                        if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
                         isSelect = false;
                         panel.SetActive(false);
                         if (lastObj.name == "house(Clone)")

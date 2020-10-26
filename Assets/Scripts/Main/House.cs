@@ -31,7 +31,6 @@ public class House : MonoBehaviour
 
     public void initHouse()
     {
-        value = 0;
         if (owner == Global.instance.owner)
         {
             sizeRate = Global.instance.buffOfSize;
@@ -41,13 +40,37 @@ public class House : MonoBehaviour
         }
         else
         {
-            sizeRate = 1;
-            addRate = 1;
-            moveRate = 1;
-            attackRate = 0;
+            if(Global.instance.diff == 0) // 中等
+            {
+                sizeRate = 1.2f;
+                addRate = 1.2f;
+                moveRate = 1.2f;
+                attackRate = 0.2f;
+            }
+            if(Global.instance.diff == 1) // 困难
+            {
+                sizeRate = 1.5f;
+                addRate = 1.5f;
+                moveRate = 1.5f;
+                attackRate = 0.2f;
+            }
+            if(Global.instance.diff == 2) // 入门
+            {
+                sizeRate = 1;
+                addRate = 1;
+                moveRate = 1;
+                attackRate = 0;
+            }
+            if(Global.instance.diff == 3) // 地狱
+            {
+                sizeRate = 2f;
+                addRate = 2f;
+                moveRate = 2f;
+                attackRate = 0.2f;
+            }
         }
         maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
-        timeDisOfAdd = 0.9f / addRate;
+        timeDisOfAdd = 1f / addRate;
         timeDisOfMove = 0.1f / moveRate;
     }
 
@@ -55,6 +78,7 @@ public class House : MonoBehaviour
     {
         fogSize = 5;
         lv = 1;
+        value = 0;
         initHouse();
     }
 
@@ -165,6 +189,7 @@ public class House : MonoBehaviour
                 if (GUI.Button(new Rect(mPoint.x, mPoint.y + 50, 60, 50), "UP"))
                 {
                     lv++;
+                    value -= maxValue;
                     initHouse();
                 }
             }
