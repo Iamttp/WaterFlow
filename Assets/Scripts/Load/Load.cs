@@ -26,6 +26,7 @@ public class Load : MonoBehaviour
     void Start()
     {
         Screen.SetResolution(1920, 1080, true);
+        Screen.sleepTimeout = SleepTimeout.NeverSleep; // android 息屏
     }
 
     void Update()

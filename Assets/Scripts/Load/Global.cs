@@ -129,8 +129,8 @@ public class Global : MonoBehaviour
 
     public int getScore()
     {
-        int scoreNum = (1000 - (int)instance.useTime) * 10 + instance.killCas * 100 + instance.killS * 10 +
-    instance.lostCas * 10 + instance.lostS * 1 + instance.upTime * 200;
+        int scoreNum = instance.killCas * 100 + instance.killS * 10 -
+    instance.lostCas * 10 - instance.lostS * 1 + instance.upTime * 200;
         if (instance.diff == 0) // 中等
         {
         }
@@ -146,6 +146,7 @@ public class Global : MonoBehaviour
         {
             scoreNum *= 10;
         }
+        scoreNum += (1000 - (int)instance.useTime);
         if (scoreNum < 0) scoreNum = 0;
         return scoreNum;
     }

@@ -44,16 +44,33 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect && Scene.instance.fogVis[script.pos.x, script.pos.y])
                         {
-                            if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = true;
-                            if (Global.instance.isStop)
+                            if (Global.instance.diff == 0 || Global.instance.diff == 2)
                             {
+                                Global.instance.isStop = true;
                                 panel.SetActive(true);
                                 houseInfo(obj);
+
+                                if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                {
+                                    isSelect = true;
+                                    obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
+                                }
                             }
-                            if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                            else
                             {
-                                isSelect = true;
-                                obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
+                                if (!Global.instance.isStop) // 不暂停时点选
+                                {
+                                    if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                    {
+                                        isSelect = true;
+                                        obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
+                                    }
+                                }
+                                else // 暂停时查看
+                                {
+                                    panel.SetActive(true);
+                                    houseInfo(obj);
+                                }
                             }
                         }
                         else

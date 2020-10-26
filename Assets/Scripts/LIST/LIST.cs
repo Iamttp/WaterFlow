@@ -9,9 +9,27 @@ using UnityEngine.UI;
 public class LIST : MonoBehaviour
 {
     public Text score;
+    public static string AssetCachesDir
+    {
+        get
+        {
+            string dir = "";
+#if UNITY_EDITOR
+            dir = Application.dataPath + "Caches/";//路径：/AssetsCaches/
+#elif UNITY_IOS
+            dir = Application.temporaryCachePath + "/";//路径：Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Library/Caches/
+#elif UNITY_ANDROID
+            dir = Application.persistentDataPath + "/";//路径：/data/data/xxx.xxx.xxx/files/
+#else
+            dir = Application.streamingAssetsPath + "/";//路径：/xxx_Data/StreamingAssets/
+#endif
+            return dir;
+        }
+    }
+
     void Start()
     {
-        FileInfo fi = new FileInfo(Application.dataPath + "/Resources/Json.txt");
+        FileInfo fi = new FileInfo(AssetCachesDir + "Json.txt");
         if (!fi.Exists)
         {
             score.text = "暂无记录";
@@ -36,7 +54,7 @@ public class LIST : MonoBehaviour
 
     public static void write(string str)
     {
-        FileInfo fi = new FileInfo(Application.dataPath + "/Resources/Json.txt");
+        FileInfo fi = new FileInfo(AssetCachesDir + "Json.txt");
         StreamWriter sw;
         if (fi.Exists)
         {
@@ -53,7 +71,7 @@ public class LIST : MonoBehaviour
     List<string> read()
     {
         List<string> strArray = new List<string>();
-        FileStream fi = new FileStream(Application.dataPath + "/Resources/Json.txt", FileMode.Open);
+        FileStream fi = new FileStream(AssetCachesDir + "Json.txt", FileMode.Open);
         if (fi.CanRead)
         {
             StreamReader sw = new StreamReader(fi);
