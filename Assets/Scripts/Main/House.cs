@@ -131,10 +131,13 @@ public class House : MonoBehaviour
 
     void UnTouched()
     {
+        Color temp;
         for (int k = 0; k < Scene.instance.sizeOfHouse; k++)
         {
             GameObject obj = Scene.instance.posToHouse[Scene.instance.housePosArray[k]];
+            temp = obj.GetComponent<MeshRenderer>().material.GetColor("_Color");
             obj.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 1");
+            obj.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
         }
     }
 
@@ -180,9 +183,9 @@ public class House : MonoBehaviour
         if (!Scene.instance.fogVis[pos.x, pos.y]) return;
 
         style1 = GUI.skin.button;
-        style1.fontSize = 50;
+        style1.fontSize = 60;
 
-        style2.fontSize = 50;
+        style2.fontSize = 60;
         style2.normal.textColor = new Color(1, 1, 1, 1);
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
@@ -191,7 +194,7 @@ public class House : MonoBehaviour
         {
             if (lv < maxLv && value >= maxValue)
             {
-                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 60, 60, 50), "U", style1))
+                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 60, 50), "U", style1))
                 {
                     lv++;
                     value -= maxValue;

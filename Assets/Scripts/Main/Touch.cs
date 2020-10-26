@@ -44,9 +44,12 @@ public class Touch : MonoBehaviour
                     {
                         if (!isSelect && Scene.instance.fogVis[script.pos.x, script.pos.y])
                         {
-                            if(Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = true;
-                            panel.SetActive(true);
-                            houseInfo(obj);
+                            if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = true;
+                            if (Global.instance.isStop)
+                            {
+                                panel.SetActive(true);
+                                houseInfo(obj);
+                            }
                             if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
                             {
                                 isSelect = true;
@@ -55,10 +58,13 @@ public class Touch : MonoBehaviour
                         }
                         else
                         {
-                            if(Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
-                            isSelect = false;
-                            panel.SetActive(false);
-                            if (lastObj.GetComponent<House>() != null)
+                            if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
+                            if (!Global.instance.isStop)
+                            {
+                                isSelect = false;
+                                panel.SetActive(false);
+                            }
+                            if (!Global.instance.isStop && lastObj.GetComponent<House>() != null)
                                 if (lastObj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
                                 {
                                     obj.SendMessage("JustAttack", lastObj, SendMessageOptions.DontRequireReceiver);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LOST : MonoBehaviour
@@ -26,5 +27,11 @@ public class LOST : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void backFun()
+    {
+        Global.instance.DataInit();
+        SceneManager.LoadScene(0);
     }
 }
