@@ -40,33 +40,33 @@ public class House : MonoBehaviour
         }
         else
         {
-            if(Global.instance.diff == 0) // 中等
+            if (Global.instance.diff == 0) // 中等
             {
                 sizeRate = 1.2f;
                 addRate = 1.2f;
                 moveRate = 1.2f;
-                attackRate = 0.2f;
+                attackRate = 0.1f;
             }
-            if(Global.instance.diff == 1) // 困难
+            if (Global.instance.diff == 1) // 困难
             {
                 sizeRate = 1.5f;
                 addRate = 1.5f;
                 moveRate = 1.5f;
                 attackRate = 0.2f;
             }
-            if(Global.instance.diff == 2) // 入门
+            if (Global.instance.diff == 2) // 入门
             {
                 sizeRate = 1;
                 addRate = 1;
                 moveRate = 1;
                 attackRate = 0;
             }
-            if(Global.instance.diff == 3) // 地狱
+            if (Global.instance.diff == 3) // 地狱
             {
                 sizeRate = 2f;
                 addRate = 2f;
                 moveRate = 2f;
-                attackRate = 0.2f;
+                attackRate = 0.3f;
             }
         }
         maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
@@ -173,12 +173,17 @@ public class House : MonoBehaviour
     }
 
 
-    GUIStyle style = new GUIStyle();
+    GUIStyle style1 = new GUIStyle();
+    GUIStyle style2 = new GUIStyle();
     private void OnGUI()
     {
         if (!Scene.instance.fogVis[pos.x, pos.y]) return;
 
-        style.fontSize = 45;
+        style1 = GUI.skin.button;
+        style1.fontSize = 50;
+
+        style2.fontSize = 50;
+        style2.normal.textColor = new Color(1, 1, 1, 1);
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
@@ -186,7 +191,7 @@ public class House : MonoBehaviour
         {
             if (lv < maxLv && value >= maxValue)
             {
-                if (GUI.Button(new Rect(mPoint.x, mPoint.y + 50, 60, 50), "UP"))
+                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 60, 60, 50), "U", style1))
                 {
                     lv++;
                     value -= maxValue;
@@ -194,6 +199,6 @@ public class House : MonoBehaviour
                 }
             }
         }
-        GUI.Label(new Rect(mPoint.x, mPoint.y + 10, 60, 50), value.ToString() + "/" + maxValue.ToString(), style);
+        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 60, 50), value.ToString() + "/" + maxValue.ToString(), style2);
     }
 }

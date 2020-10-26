@@ -322,7 +322,7 @@ public class Scene : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         show.enabled = false;
-        restart();
+        SceneManager.LoadScene(4);
     }
 
     private IEnumerator GameNEXT()

@@ -60,7 +60,8 @@ public class Soldier : MonoBehaviour
                         script.value -= 2;
                         if (owner == Global.instance.owner) Global.instance.killS += 2;
                         if (script.owner == Global.instance.owner) Global.instance.lostS += 2;
-                        Effect.instance.red(script);
+                        if (script.owner == Global.instance.owner || owner == Global.instance.owner)
+                            Effect.instance.red(script);
                     }
                     else
                     {
