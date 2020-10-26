@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LOST.unity
     guid: 400274a83e71da24db6b48820d2922be
+  - enabled: 1
+    path: Assets/Scenes/LIST.unity
+    guid: 7fb106e209760d84a9be0f9c0bfbb8c7
   m_configObjects: {}

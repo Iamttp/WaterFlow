@@ -7,7 +7,9 @@ public class Computer : MonoBehaviour
 {
     public static Computer instance;
 
+    public Color[] colors;
     public Text text;
+    public Text score;
 
     public float hitTimeOfAttack = 0f;
     public float hitTimeOfUP = 0f;
@@ -70,5 +72,12 @@ public class Computer : MonoBehaviour
                 obj2.initHouse();
             }
         }
+
+        // 分数计算算法
+        int scoreNum = Global.instance.getScore();
+        score.text = "Score : " + scoreNum;
+        int index = scoreNum / 10000;
+        score.fontSize = 50 + 10 * (index / colors.Length);
+        score.color = colors[index % colors.Length];
     }
 }

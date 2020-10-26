@@ -196,6 +196,7 @@ public class House : MonoBehaviour
             {
                 if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 60, 50), "U", style1))
                 {
+                    Global.instance.upTime++;
                     lv++;
                     value -= maxValue;
                     initHouse();

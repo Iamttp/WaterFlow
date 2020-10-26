@@ -48,6 +48,7 @@ public class Global : MonoBehaviour
     public int lostCas;
     public int killS;
     public int lostS;
+    public int upTime; // 升级次数 TODO init
 
     // 特效开关
     public bool isShakeOpen;
@@ -77,6 +78,8 @@ public class Global : MonoBehaviour
         buffOfMoveSpeed = 1;
         buffOfAddSpeed = 1;
         buffOfSize = 1;
+
+        upTime = 0;
 
         ls = new List<node>();
         mp = new Dictionary<string, node>();
@@ -122,5 +125,28 @@ public class Global : MonoBehaviour
     public void clickIsShake()
     {
         isDeepOpen = !isDeepOpen;
+    }
+
+    public int getScore()
+    {
+        int scoreNum = (1000 - (int)instance.useTime) * 10 + instance.killCas * 100 + instance.killS * 10 +
+    instance.lostCas * 10 + instance.lostS * 1 + instance.upTime * 200;
+        if (instance.diff == 0) // 中等
+        {
+        }
+        if (instance.diff == 1) // 困难
+        {
+            scoreNum *= 5;
+        }
+        if (instance.diff == 2) // 入门
+        {
+            scoreNum /= 2;
+        }
+        if (instance.diff == 3) // 地狱
+        {
+            scoreNum *= 10;
+        }
+        if (scoreNum < 0) scoreNum = 0;
+        return scoreNum;
     }
 }

@@ -13,7 +13,8 @@ public class WIN : MonoBehaviour
 
     void Start()
     {
-        text.text = "YOU WIN !" +
+        int num = Global.instance.getScore();
+        text.text = "YOU WIN ! Score : " + num +
             "\nDiff LEVEL: " + diffs[Global.instance.diff] +
             "\nMap Size: " + size2s[Load.index2] +  // 城堡数
             "\nHouse Size: " + size1s[Load.index1] +
@@ -22,6 +23,7 @@ public class WIN : MonoBehaviour
             "\nLost Cities ： " + Global.instance.lostCas +
             "\nKill Soldiers ： " + Global.instance.killS +
             "\nLost Soldiers ： " + Global.instance.lostS;
+        LIST.write(num.ToString());
     }
 
     void Update()

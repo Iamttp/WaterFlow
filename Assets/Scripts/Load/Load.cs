@@ -43,4 +43,9 @@ public class Load : MonoBehaviour
         Global.instance.width = Global.instance.height = sizeArray[dropdownOfSize.value];
         Global.instance.diff = dropdownOfDiff.value;
     }
+
+    public void loading2()
+    {
+        SceneManager.LoadScene(5);
+    }
 }
