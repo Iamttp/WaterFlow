@@ -15,13 +15,13 @@ public class LIST : MonoBehaviour
         {
             string dir = "";
 #if UNITY_EDITOR
-            dir = Application.dataPath + "Caches/";//路径：/AssetsCaches/
+            dir = Application.dataPath + "/Resources/";
 #elif UNITY_IOS
             dir = Application.temporaryCachePath + "/";//路径：Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Library/Caches/
 #elif UNITY_ANDROID
             dir = Application.persistentDataPath + "/";//路径：/data/data/xxx.xxx.xxx/files/
 #else
-            dir = Application.streamingAssetsPath + "/";//路径：/xxx_Data/StreamingAssets/
+            dir = Application.dataPath + "/Resources/";//路径：/xxx_Data/StreamingAssets/
 #endif
             return dir;
         }
@@ -30,6 +30,7 @@ public class LIST : MonoBehaviour
     void Start()
     {
         FileInfo fi = new FileInfo(AssetCachesDir + "Json.txt");
+
         if (!fi.Exists)
         {
             score.text = "暂无记录";
