@@ -5669,11 +5669,11 @@ MonoBehaviour:
     m_Options:
     - m_Text: "\u4E2D\u7B49"
       m_Image: {fileID: 0}
-    - m_Text: "\u56F0\u96BE(\u4E0D\u6682\u505C)"
+    - m_Text: "\u56F0\u96BE(\u4E0D\u6682\u505C\\\u8FF7\u96FE\u4FDD\u6301)"
       m_Image: {fileID: 0}
     - m_Text: "\u5165\u95E8"
       m_Image: {fileID: 0}
-    - m_Text: "\u5730\u72F1(\u4E0D\u6682\u505C)"
+    - m_Text: "\u5730\u72F1(\u4E0D\u6682\u505C\u8FF7\u96FE\u4FDD\u6301)"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

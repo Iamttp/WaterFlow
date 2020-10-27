@@ -29,6 +29,26 @@ public class House : MonoBehaviour
     public Vector2Int pos;
     public int fogSize;             // 士兵侦察半径
 
+    public void fogSet(bool flag)
+    {
+        if (Global.instance.diff == 0 || Global.instance.diff == 2)
+            if (flag == false)
+                return;
+        int width = Scene.instance.width;
+        int height = Scene.instance.height;
+        for (int i = -fogSize; i <= fogSize; i++)
+            for (int j = -fogSize; j <= fogSize; j++)
+                if (i * i + j * j <= fogSize * fogSize)
+                {
+                    int newX = pos.x + i;
+                    int newY = pos.y + j;
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height)
+                    {
+                        Scene.instance.fogVis[newX, newY] = flag;
+                    }
+                }
+    }
+
     public void initHouse()
     {
         if (owner == Global.instance.owner)
@@ -72,6 +92,7 @@ public class House : MonoBehaviour
         maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
         timeDisOfAdd = 1f / addRate;
         timeDisOfMove = 0.1f / moveRate;
+        fogSet(owner == Global.instance.owner);
     }
 
     void Start()
@@ -91,23 +112,6 @@ public class House : MonoBehaviour
             timeUse = timeDisOfAdd;
             if (value < maxValue) value++;
             else if (value > maxValue) value--;
-
-            if (owner == Global.instance.owner) // fog
-            {
-                int width = Scene.instance.width;
-                int height = Scene.instance.height;
-                for (int i = -fogSize; i <= fogSize; i++)
-                    for (int j = -fogSize; j <= fogSize; j++)
-                        if (i * i + j * j <= fogSize * fogSize)
-                        {
-                            int newX = pos.x + i;
-                            int newY = pos.y + j;
-                            if (newX >= 0 && newX < width && newY >= 0 && newY < height)
-                            {
-                                Scene.instance.fogVis[newX, newY] = true;
-                            }
-                        }
-            }
         }
     }
 
@@ -180,7 +184,7 @@ public class House : MonoBehaviour
     GUIStyle style2 = new GUIStyle();
     private void OnGUI()
     {
-        if (!Scene.instance.fogVis[pos.x, pos.y]) return;
+        if (!Scene.instance.fogVis[pos.x, pos.y] && Scene.instance.fogVisAlpha[pos.x, pos.y] >= 1f) return; // 不透明时不return
 
         style1 = GUI.skin.button;
         style1.fontSize = 60;

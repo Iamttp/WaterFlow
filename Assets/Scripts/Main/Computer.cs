@@ -13,10 +13,11 @@ public class Computer : MonoBehaviour
 
     public float hitTimeOfAttack = 0f;
     public float hitTimeOfUP = 0f;
-
+    public float fogTime;
     void Start()
     {
         instance = this;
+        fogTime = 0.1f;
     }
 
     //将秒数转化为时分秒
@@ -56,6 +57,7 @@ public class Computer : MonoBehaviour
                     break;
                 }
             }
+            Scene.instance.FogTest();
         }
 
         hitTimeOfUP += Time.deltaTime;
@@ -73,11 +75,20 @@ public class Computer : MonoBehaviour
             }
         }
 
-        // 分数计算算法
-        int scoreNum = Global.instance.getScore();
-        score.text = "Score : " + scoreNum;
-        int index = scoreNum / 10000;
-        score.fontSize = 50 + 10 * (index / colors.Length);
-        score.color = colors[index % colors.Length];
+
+        fogTime -= Time.deltaTime;
+        if (fogTime < 0)
+        {
+            fogTime = 0.1f;
+
+            // 分数计算算法
+            int scoreNum = Global.instance.getScore();
+            score.text = "Score : " + scoreNum;
+            int index = scoreNum / 10000;
+            score.fontSize = 50 + 10 * (index / colors.Length);
+            score.color = colors[index % colors.Length];
+
+            Scene.instance.FogTest();
+        }
     }
 }

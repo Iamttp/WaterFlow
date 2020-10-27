@@ -42,7 +42,7 @@ public class Touch : MonoBehaviour
                     var script = obj.GetComponent<House>();
                     if (obj.name == "house(Clone)")
                     {
-                        if (!isSelect && Scene.instance.fogVis[script.pos.x, script.pos.y])
+                        if (!isSelect && (Scene.instance.fogVis[script.pos.x, script.pos.y] || Scene.instance.fogVisAlpha[script.pos.x, script.pos.y] < 1f))
                         {
                             if (Global.instance.diff == 0 || Global.instance.diff == 2)
                             {

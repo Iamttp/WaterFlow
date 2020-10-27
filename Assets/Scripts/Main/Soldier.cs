@@ -44,7 +44,8 @@ public class Soldier : MonoBehaviour
                             int newY = path[now].y + j;
                             if (newX >= 0 && newX < width && newY >= 0 && newY < height)
                             {
-                                Scene.instance.fogVis[newX, newY] = true;
+                                if (Global.instance.diff == 0 || Global.instance.diff == 2) Scene.instance.fogVis[newX, newY] = true;
+                                else Scene.instance.fogVisAlpha[newX, newY] = 0;
                             }
                         }
             }

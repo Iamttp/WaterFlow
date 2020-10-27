@@ -52,6 +52,7 @@ public class Scene : MonoBehaviour
 
     private node[,] table;
     public bool[,] fogVis;
+    public float[,] fogVisAlpha;
     private bool[,] visTable; // 防止太密集
 
     public List<Vector2Int> housePosArray;
@@ -89,6 +90,7 @@ public class Scene : MonoBehaviour
         housePosArray = new List<Vector2Int>();
         table = new node[width, height];
         fogVis = new bool[width, height];
+        fogVisAlpha = new float[width, height];
         visTable = new bool[width, height];
         g = new int[sizeOfHouse, sizeOfHouse];
         posToHouse = new Dictionary<Vector2Int, GameObject>();
@@ -316,7 +318,41 @@ public class Scene : MonoBehaviour
         renderScene();
         level.text = "Level " + Global.instance.lev;
         show.enabled = false;
+
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                fogVisAlpha[i, j] = 1;
     }
+
+    public void FogTest()
+    {
+        foreach (var temp in posToHouse) // 每隔一段时间，确认城堡视野
+        {
+            var script = temp.Value.GetComponent<House>();
+            if (script.owner == Global.instance.owner) script.fogSet(true);
+        }
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+            {
+                if (fogVisAlpha[i, j] < 1)
+                    fogVisAlpha[i, j] += 0.01f;
+            }
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+            {
+                if (posToFog.ContainsKey(new Vector2Int(i, j)))
+                {
+                    posToFog[new Vector2Int(i, j)].SetActive(!fogVis[i, j]); // TODO
+
+                    if (Global.instance.diff == 0 || Global.instance.diff == 2) continue;
+                    if (!fogVis[i, j] && fogVisAlpha[i, j] < 1)
+                    {
+                        posToFog[new Vector2Int(i, j)].GetComponent<MeshRenderer>().material.SetFloat("_Alpha", fogVisAlpha[i, j]);
+                    }
+                }
+            }
+    }
+
 
     private IEnumerator GameEnd()
     {
@@ -369,13 +405,6 @@ public class Scene : MonoBehaviour
             show.text = "GAME OVER";
             StartCoroutine(GameEnd());
         }
-
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-            {
-                if (posToFog.ContainsKey(new Vector2Int(i, j)))
-                    posToFog[new Vector2Int(i, j)].SetActive(!fogVis[i, j]); // TODO
-            }
     }
 
 
