@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -38,12 +39,16 @@ public class LIST : MonoBehaviour
         }
 
         List<string> strArray = read();
-        strArray.Sort();
-        strArray.Reverse();
-        StringBuilder str = new StringBuilder();
+
+        List<int> intArray = new List<int>();
         for (int i = 0; i < strArray.Count; i++)
+            intArray.Add(Convert.ToInt32(strArray[i]));
+        intArray.Sort();
+        intArray.Reverse();
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < intArray.Count; i++)
         {
-            str.Append((i + 1) + " ------------------------------------ " + strArray[i] + "\n");
+            str.Append((i + 1) + " ------------------------------------ " + intArray[i] + "\n");
         }
         score.text = str.ToString();
     }

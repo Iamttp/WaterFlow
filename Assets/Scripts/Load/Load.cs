@@ -21,7 +21,7 @@ public class Load : MonoBehaviour
     public static int[] camX = new int[] { 20, 30, 10, 40 };
     public static int[] camY = new int[] { 20, 30, 10, 40 };
 
-    public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f};
+    public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f };
 
     void Start()
     {
@@ -48,5 +48,10 @@ public class Load : MonoBehaviour
     public void loading2()
     {
         SceneManager.LoadScene(5);
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
     }
 }

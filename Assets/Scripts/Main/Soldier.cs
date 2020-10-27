@@ -78,6 +78,8 @@ public class Soldier : MonoBehaviour
                             if (owner == Global.instance.owner) Global.instance.killCas++;
                             if (script.owner == Global.instance.owner) Global.instance.lostCas++;
                         }
+                        if (script.owner == Global.instance.owner && owner != Global.instance.owner)
+                            script.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver); // TODO 被占领后UnTouched
                         script.owner = owner;
                         script.lv = 1;
                         script.value = 0;

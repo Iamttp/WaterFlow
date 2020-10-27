@@ -93,6 +93,8 @@ public class House : MonoBehaviour
         timeDisOfAdd = 1f / addRate;
         timeDisOfMove = 0.1f / moveRate;
         fogSet(owner == Global.instance.owner);
+
+        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
     }
 
     void Start()
