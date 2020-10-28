@@ -5,15 +5,15 @@ using UnityEngine;
 public class House : MonoBehaviour
 {
     [Header("House属性")]
-    public int value;                           // 城堡生命值
+    public int value;                           // 水泡生命值
     public int perValue;
     public int maxValue;                        // 最大生命值
     public int lv;                              // 等级
     public int maxLv;
     public int owner;
 
-    public float timeDisOfAdd;    // 城堡生命值增加间隔
-    public float timeDisOfMove;   // 士兵移动时间间隔
+    public float timeDisOfAdd;    // 水泡生命值增加间隔
+    public float timeDisOfMove;   // 水滴移动时间间隔
 
     [Header("对应buff")]
     public float sizeRate;        // 最大生命值比例
@@ -27,7 +27,7 @@ public class House : MonoBehaviour
     private float timeUse;
 
     public Vector2Int pos;
-    public int fogSize;             // 士兵侦察半径
+    public int fogSize;             // 水滴侦察半径
 
     public void fogSet(bool flag)
     {
@@ -186,7 +186,7 @@ public class House : MonoBehaviour
     GUIStyle style2 = new GUIStyle();
     private void OnGUI()
     {
-        if (!Scene.instance.fogVis[pos.x, pos.y] && Scene.instance.fogVisAlpha[pos.x, pos.y] >= 1f) return; // 不透明时不return
+        if (!Scene.instance.fogVis[pos.x, pos.y] && Scene.instance.fogVisAlpha[pos.x, pos.y] >= 0.5f) return; // 不透明到达一定程度不return
 
         style1 = GUI.skin.button;
         style1.fontSize = 60;

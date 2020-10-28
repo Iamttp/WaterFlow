@@ -7,20 +7,35 @@ using UnityEngine.UI;
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 
 /// 
-/// TODO 不同城堡间路径重合需解决 （一定概率，城堡在道路边，影响视角）
+/// TODO 不同水泡间路径重合需解决 （一定概率，水泡在道路边，影响视角）
 /// TODO 局域网 
 /// TODO 粒子特效 
-/// TODO 士兵间碰撞 （现在未考虑士兵碰撞）
-/// TODO 兵力显示（现在为城堡数显示）
+/// TODO 水滴间碰撞 （现在未考虑水滴碰撞）
+/// TODO 兵力显示（现在为水泡数显示）
 /// 
 /// 选择颜色，开始游戏
-/// 通过点击矩形城堡，派遣士兵
-/// 攻占所有城堡，游戏胜利
-/// 失去城堡，游戏失败
+/// 通过点击矩形水泡，派遣水滴
+/// 攻占所有水泡，游戏胜利
+/// 失去水泡，游戏失败
 /// 
 /// WASD / 单指拖动 -> 移动视角
 /// 鼠标滚轮 / 双指 / 滑动条 -> 缩放视角
 /// 鼠标左键 / 单指点击 -> 选择
+/// 
+/// 公元2011年，NASA开普勒计划确认首颗位于宜居带的系外行星Kepler-22b，
+/// 其直径大约是地球的2.4倍，距离人类大约有600光年。表面温度约为70华氏度(相当于21摄氏度)。
+/// 
+/// 公元2080年，SpaceX确认Kepler-22b为一颗温暖的海洋行星，存在大面积水域，并极可能存在高等生物。
+/// 
+/// 公元2240年，墨子号量子科学实验卫星接收到Kepler-22b高智慧生命体的友好信号，
+/// 它们生活在富含氧气的巨大海洋中，并拥有极强的精神能力，能够自由的控制水泡、水滴。
+/// 
+/// 公元2352年，神舟零号飞船帮助人类实现虫洞旅行，登陆到Kepler-22b星球上，在一望无际的海洋中，只发现了断壁残垣，
+/// 透过时隐时现的光线，科学家发现了它们留下的唯一证据，被注入精神力的水泡、水滴。
+/// 
+/// 在得知高智慧生命体的消亡在于微小如病毒、数目如宇宙繁星的海洋塑料碎片造成Kepler-22b生态失衡后，
+/// 程序员pttmai设计了一款游戏，希望为它们在宇宙中留下点记忆。
+/// 
 /// </summary>
 public class Scene : MonoBehaviour
 {
@@ -181,7 +196,7 @@ public class Scene : MonoBehaviour
         }
         if (isReverse) path.Reverse();
 
-        // 两条道路间周围存在道路或者城堡，返回false
+        // 两条道路间周围存在道路或者水泡，返回false
         for (int i = 4; i < path.Count - 4; i++)
             for (int offsetY = -sizeOfVis / 2; offsetY <= sizeOfVis / 2; offsetY++)
                 for (int offsetX = -sizeOfVis / 2; offsetX <= sizeOfVis / 2; offsetX++)
@@ -221,7 +236,7 @@ public class Scene : MonoBehaviour
                     }
                 }
 
-        // 排除出现存在城堡无道路连接的情况
+        // 排除出现存在水泡无道路连接的情况
         for (int i = 0; i < housePosArray.Count; i++)
         {
             bool isOK = false;
@@ -239,7 +254,7 @@ public class Scene : MonoBehaviour
             }
         }
 
-        // 排除出现多张图，每张图城堡数大于等于2的情况。
+        // 排除出现多张图，每张图水泡数大于等于2的情况。
         countDfs = 0;
         visDfs = new bool[sizeOfHouse];
         visDfs[0] = true;
@@ -324,19 +339,51 @@ public class Scene : MonoBehaviour
                 fogVisAlpha[i, j] = 1;
     }
 
+    //private int timeOfAvg;
     public void FogTest()
     {
-        foreach (var temp in posToHouse) // 每隔一段时间，确认城堡视野
+        foreach (var temp in posToHouse) // 每隔一段时间，确认水泡视野
         {
             var script = temp.Value.GetComponent<House>();
             if (script.owner == Global.instance.owner) script.fogSet(true);
         }
+
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
             {
-                if (fogVisAlpha[i, j] < 1)
-                    fogVisAlpha[i, j] += 0.01f;
+                float ran = Random.value;
+                if (ran > 0.99f) // 0.2 * 0.08f  TODO 迷霧效果改 滤波
+                {
+                    //if (fogVisAlpha[i, j] > 0.6f)
+                        //fogVisAlpha[i, j] = 0.6f;
+                }
+                else // 0.8 * 0.02
+                {
+                    if (fogVisAlpha[i, j] < 1)
+                        fogVisAlpha[i, j] += 0.02f;
+                }
             }
+
+        //if(timeOfAvg++ % 10 == 0)
+        //{
+        //    int[] offsetX = new int[] { 1, -1, 0, 0 };
+        //    int[] offsetY = new int[] { 0, 0, 1, -1 };
+        //    for (int i = 0; i < width; i++)
+        //        for (int j = 0; j < height; j++)
+        //        {
+        //            float sum = 0;
+        //            for (int k = 0; k < 4; k++)
+        //            {
+        //                int newX = offsetX[k] + i;
+        //                int newY = offsetY[k] + j;
+        //                if (newX >= 0 && newX < width && newY >= 0 && newY < height)
+        //                    sum += fogVisAlpha[newX, newY];
+        //            }
+        //            fogVisAlpha[i, j] = fogVisAlpha[i, j] * 0.5f + sum / 4.0f * 0.5f;
+        //        }
+        //}
+
+
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
             {
@@ -381,7 +428,6 @@ public class Scene : MonoBehaviour
         if (Global.instance.isStop) stopButton.text = "START";
         else stopButton.text = "STOP";
         if (Global.instance.isStop) return;
-        if (Global.instance.flag) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
         {
@@ -389,6 +435,7 @@ public class Scene : MonoBehaviour
             if (houseOfOwner[i] == Global.instance.owner) num++;
             posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
         }
+        if (Global.instance.flag) return;
         if (num == housePosArray.Count)
         {
             // 游戏胜利 下一关

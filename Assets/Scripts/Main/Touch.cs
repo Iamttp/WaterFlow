@@ -18,7 +18,7 @@ public class Touch : MonoBehaviour
 
     public Camera myCamera;
     private float hitTime = 0f;
-    public bool isSelect;       // 是否选择了我方城堡
+    public bool isSelect;       // 是否选择了我方水泡
     public GameObject lastObj;
 
     void Start()
@@ -109,10 +109,10 @@ public class Touch : MonoBehaviour
     {
         var script = obj.GetComponent<House>();
         lvText.text = "LV : " + script.lv;
-        addText.text = "士兵增加间隔 : " + script.timeDisOfAdd.ToString("f2") + "s";
-        moveText.text = "士兵移动间隔 : " + script.timeDisOfMove.ToString("f2") + "s";
-        sizeText.text = "士兵数 : " + script.value + " / " + script.maxValue;
-        attackText.text = "士兵暴击率 : " + Mathf.RoundToInt(script.attackRate * 100) + "%";
+        addText.text = "水滴增加间隔 : " + script.timeDisOfAdd.ToString("f2") + "s";
+        moveText.text = "水滴移动间隔 : " + script.timeDisOfMove.ToString("f2") + "s";
+        sizeText.text = "水滴数 : " + script.value + " / " + script.maxValue;
+        attackText.text = "水滴暴击率 : " + Mathf.RoundToInt(script.attackRate * 100) + "%";
 
         var tempColor = Scene.instance.colorTable[script.owner];
         tempColor.a /= 3;

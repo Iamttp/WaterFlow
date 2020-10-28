@@ -57,7 +57,6 @@ public class Computer : MonoBehaviour
                     break;
                 }
             }
-            Scene.instance.FogTest();
         }
 
         hitTimeOfUP += Time.deltaTime;

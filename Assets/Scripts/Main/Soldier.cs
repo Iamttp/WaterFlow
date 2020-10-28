@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Soldier : MonoBehaviour
 {
-    public List<Vector2Int> path;   // 士兵要走的路程
+    public List<Vector2Int> path;   // 水滴要走的路程
     public int now;                 // 当前路程索引
     public Vector3 basePos;         // 起点位置
     public House srcHouseScript;
@@ -13,7 +13,7 @@ public class Soldier : MonoBehaviour
 
     public float attackRate;
     public float timeDisOfMove;
-    public int fogSize;             // 士兵侦察半径
+    public int fogSize;             // 水滴侦察半径
     private float timeUse;          // 行走间隔 House.timeDisOfMove
 
     void Start()
@@ -79,7 +79,7 @@ public class Soldier : MonoBehaviour
                             if (script.owner == Global.instance.owner) Global.instance.lostCas++;
                         }
                         if (script.owner == Global.instance.owner && owner != Global.instance.owner)
-                            script.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver); // TODO 被占领后UnTouched
+                            script.SendMessage("UnTouched", SendMessageOptions.DontRequireReceiver);
                         script.owner = owner;
                         script.lv = 1;
                         script.value = 0;

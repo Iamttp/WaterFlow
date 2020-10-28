@@ -16,7 +16,7 @@ public class WIN : MonoBehaviour
         int num = Global.instance.getScore();
         text.text = "YOU WIN ! Score : " + num +
             "\nDiff LEVEL: " + diffs[Global.instance.diff] +
-            "\nMap Size: " + size2s[Load.index2] +  // 城堡数
+            "\nMap Size: " + size2s[Load.index2] +  // 水泡数
             "\nHouse Size: " + size1s[Load.index1] +
             "\n\nUse Time : " + (int)(Global.instance.useTime) + "s" +
             "\nSiege Cities ： " + Global.instance.killCas +
