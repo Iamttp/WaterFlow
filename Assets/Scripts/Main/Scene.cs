@@ -294,6 +294,8 @@ public class Scene : MonoBehaviour
 
     void renderScene()
     {
+        Vector3 rotationVector = new Vector3(0, 180, 0);
+        Quaternion rotation = Quaternion.Euler(rotationVector);
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
             {
@@ -301,11 +303,11 @@ public class Scene : MonoBehaviour
                 {
                     case 0:
                         stop.transform.localScale = new Vector3(allScale, allScale, 1);
-                        Instantiate(stop, stop.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
+                        Instantiate(stop, stop.transform.position + new Vector3(i * allScale, j * allScale), rotation, instance.transform);
                         break;
                     case 1:
                         go.transform.localScale = new Vector3(allScale, allScale, 1);
-                        Instantiate(go, go.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
+                        Instantiate(go, go.transform.position + new Vector3(i * allScale, j * allScale), rotation, instance.transform);
                         break;
                     case 2:
                         house.transform.localScale = new Vector3(allScale, allScale, 1);
