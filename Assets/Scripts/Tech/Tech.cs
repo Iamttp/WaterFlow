@@ -51,6 +51,8 @@ public class Tech : MonoBehaviour
     {
         initText();
         story.text = strs[Global.instance.lev - 1];
+        canvas.GetComponent<CanvasGroup>().alpha = 0;
+        StartCoroutine(alphaC());
     }
 
     void initText()
@@ -70,6 +72,16 @@ public class Tech : MonoBehaviour
             else if (Global.instance.ls[i].name == "addSpeed") buttons[i].onClick.AddListener(addSpeedFunc);
             else if (Global.instance.ls[i].name == "size") buttons[i].onClick.AddListener(sizeFunc);
         }
+    }
+
+    public Canvas canvas;
+
+    private IEnumerator alphaC()
+    {
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
+        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(alphaC());
     }
 
     void Update()

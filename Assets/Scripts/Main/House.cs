@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class House : MonoBehaviour
 {
     [Header("House属性")]
+    public GameObject pointLig;
+    public GameObject plane;
     public int value;                           // 水泡生命值
     public int perValue;
     public int maxValue;                        // 最大生命值
@@ -27,28 +30,8 @@ public class House : MonoBehaviour
     private float timeUse;
 
     public Vector2Int pos;
-    public int fogSize;             // 水滴侦察半径
 
-    public void fogSet(bool flag)
-    {
-        if (Global.instance.diff == 0 || Global.instance.diff == 2)
-            if (flag == false)
-                return;
-        int width = Scene.instance.width;
-        int height = Scene.instance.height;
-        for (int i = -fogSize; i <= fogSize; i++)
-            for (int j = -fogSize; j <= fogSize; j++)
-                if (i * i + j * j <= fogSize * fogSize)
-                {
-                    int newX = pos.x + i;
-                    int newY = pos.y + j;
-                    if (newX >= 0 && newX < width && newY >= 0 && newY < height)
-                    {
-                        Scene.instance.fogVis[newX, newY] = flag;
-                    }
-                }
-    }
-
+    private int sizeOfLig = 10;
     public void initHouse()
     {
         if (owner == Global.instance.owner)
@@ -92,17 +75,17 @@ public class House : MonoBehaviour
         maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
         timeDisOfAdd = 1f / addRate;
         timeDisOfMove = 0.1f / moveRate;
-        fogSet(owner == Global.instance.owner);
 
         gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
+        pointLig.SetActive(owner == Global.instance.owner);
     }
 
     void Start()
     {
-        fogSize = 5;
         lv = 1;
         value = 0;
         initHouse();
+        guiMe = Resources.Load<GUISkin>("Textures/skin");
     }
 
     void Update()
@@ -114,6 +97,16 @@ public class House : MonoBehaviour
             timeUse = timeDisOfAdd;
             if (value < maxValue) value++;
             else if (value > maxValue) value--;
+
+            if (owner == Global.instance.owner)
+                for (int i = -sizeOfLig; i <= sizeOfLig; i++)
+                    for (int j = -sizeOfLig; j <= sizeOfLig; j++)
+                    {
+                        int newX = pos.x + i;
+                        int newY = pos.y + j;
+                        if (newX >= 0 && newX < Scene.instance.width && newY >= 0 && newY < Scene.instance.height)
+                            Scene.instance.ligVis[newX, newY] = 2; // 持续2秒
+                    }
         }
     }
 
@@ -128,11 +121,21 @@ public class House : MonoBehaviour
                 obj.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
                 obj.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 10);
                 obj.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
+
+                var script = obj.GetComponent<House>();
+                script.plane.SetActive(true);
+                if (script.owner == owner)
+                    script.plane.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0, 1, 0, 1));
+                else
+                    script.plane.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(1, 0, 0, 1));
             }
         temp = gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
         gameObject.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 3");
         gameObject.GetComponent<MeshRenderer>().material.SetFloat("_Rate", 2);
         gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
+
+        plane.SetActive(true);
+        plane.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0, 1, 1, 1));
     }
 
     void UnTouched()
@@ -144,6 +147,8 @@ public class House : MonoBehaviour
             temp = obj.GetComponent<MeshRenderer>().material.GetColor("_Color");
             obj.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/New Material 1");
             obj.GetComponent<MeshRenderer>().material.SetColor("_Color", temp);
+
+            obj.GetComponent<House>().plane.SetActive(false);
         }
     }
 
@@ -181,18 +186,16 @@ public class House : MonoBehaviour
         StartCoroutine(DelayToInvokeDo(lastObj, lastObj.GetComponent<House>().value - val));
     }
 
-
+    GUISkin guiMe;
     GUIStyle style1 = new GUIStyle();
     GUIStyle style2 = new GUIStyle();
+
     private void OnGUI()
     {
-        if (!Scene.instance.fogVis[pos.x, pos.y] && Scene.instance.fogVisAlpha[pos.x, pos.y] >= 0.5f) return; // 不透明到达一定程度不return
+        if (owner != Global.instance.owner && Scene.instance.ligVis[pos.x, pos.y] < 0.2f) return;
 
-        style1 = GUI.skin.button;
-        style1.fontSize = 60;
-
-        style2.fontSize = 60;
-        style2.normal.textColor = new Color(1, 1, 1, 1);
+        style1 = guiMe.button;
+        style2 = guiMe.label;
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
@@ -200,8 +203,9 @@ public class House : MonoBehaviour
         {
             if (lv < maxLv && value >= maxValue)
             {
-                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 60, 50), "U", style1))
+                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 100, 50), "U", style1))
                 {
+                    Music.instance.playDown2();
                     Global.instance.upTime++;
                     lv++;
                     value -= maxValue;
@@ -209,6 +213,6 @@ public class House : MonoBehaviour
                 }
             }
         }
-        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 60, 50), value.ToString() + "/" + maxValue.ToString(), style2);
+        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), value.ToString() + "/" + maxValue.ToString(), style2);
     }
 }

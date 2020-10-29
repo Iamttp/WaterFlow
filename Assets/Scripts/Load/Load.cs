@@ -23,15 +23,26 @@ public class Load : MonoBehaviour
 
     public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f };
 
+    public Canvas canvas;
+
     void Start()
     {
         Screen.SetResolution(1920, 1080, true);
         Screen.sleepTimeout = SleepTimeout.NeverSleep; // android 息屏
+        canvas.GetComponent<CanvasGroup>().alpha = 0;
+        StartCoroutine(alphaC());
+    }
+
+    private IEnumerator alphaC()
+    {
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
+        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(alphaC());
     }
 
     void Update()
     {
-
     }
 
     public void loading()

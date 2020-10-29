@@ -18,7 +18,7 @@ public class Back : MonoBehaviour
         temp.SetFloat("_CenterU", x);
         temp.SetFloat("_CenterV", z);
         temp.SetFloat("_Amount", a);
-        a -= 0.005f;
+        a -= 0.01f;
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(setDrop());
     }
@@ -39,7 +39,6 @@ public class Back : MonoBehaviour
                     pos /= -10;
                     pos.x += 0.5f;
                     pos.z += 0.5f;
-                    Debug.Log(pos);
                     x = pos.x;
                     z = pos.z;
                     a = 0.2f;

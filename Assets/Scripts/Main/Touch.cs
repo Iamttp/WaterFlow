@@ -42,14 +42,20 @@ public class Touch : MonoBehaviour
                     var script = obj.GetComponent<House>();
                     if (obj.name == "house(Clone)")
                     {
-                        if (!isSelect && (Scene.instance.fogVis[script.pos.x, script.pos.y] || Scene.instance.fogVisAlpha[script.pos.x, script.pos.y] < 1f))
+                        if (!isSelect)
                         {
                             if (Global.instance.diff == 0 || Global.instance.diff == 2)
                             {
-                                Global.instance.isStop = true;
-                                panel.SetActive(true);
-                                houseInfo(obj);
+                                if (obj.GetComponent<House>().owner != Global.instance.owner && Scene.instance.ligVis[obj.GetComponent<House>().pos.x, obj.GetComponent<House>().pos.y] < 0.2f)
+                                {
 
+                                }
+                                else
+                                {
+                                    Global.instance.isStop = true;
+                                    panel.SetActive(true);
+                                    houseInfo(obj);
+                                }
                                 if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
                                 {
                                     isSelect = true;
@@ -68,8 +74,15 @@ public class Touch : MonoBehaviour
                                 }
                                 else // 暂停时查看
                                 {
-                                    panel.SetActive(true);
-                                    houseInfo(obj);
+                                    if (obj.GetComponent<House>().owner != Global.instance.owner && Scene.instance.ligVis[obj.GetComponent<House>().pos.x, obj.GetComponent<House>().pos.y] < 0.2f)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        panel.SetActive(true);
+                                        houseInfo(obj);
+                                    }
                                 }
                             }
                         }

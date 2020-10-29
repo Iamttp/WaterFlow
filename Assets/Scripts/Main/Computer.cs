@@ -13,11 +13,11 @@ public class Computer : MonoBehaviour
 
     public float hitTimeOfAttack = 0f;
     public float hitTimeOfUP = 0f;
-    public float fogTime;
+    public float scoreTime;
     void Start()
     {
         instance = this;
-        fogTime = 0.1f;
+        scoreTime = 0.2f;
     }
 
     //将秒数转化为时分秒
@@ -75,10 +75,10 @@ public class Computer : MonoBehaviour
         }
 
 
-        fogTime -= Time.deltaTime;
-        if (fogTime < 0)
+        scoreTime -= Time.deltaTime;
+        if (scoreTime < 0)
         {
-            fogTime = 0.1f;
+            scoreTime = 0.2f;
 
             // 分数计算算法
             int scoreNum = Global.instance.getScore();
@@ -87,7 +87,11 @@ public class Computer : MonoBehaviour
             score.fontSize = 50 + 10 * (index / colors.Length);
             score.color = colors[index % colors.Length];
 
-            Scene.instance.FogTest();
+            for (int i = 0; i < Scene.instance.width; i++)
+                for (int j = 0; j < Scene.instance.height; j++)
+                {
+                    Scene.instance.ligVis[i, j] -= scoreTime;
+                }
         }
     }
 }

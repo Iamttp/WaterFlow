@@ -45,7 +45,6 @@ public class Scene : MonoBehaviour
     public GameObject house;
     public GameObject stop;
     public GameObject go;
-    public GameObject fog;
     public Text level;
     public Text show;
     public Text stopButton;
@@ -66,8 +65,6 @@ public class Scene : MonoBehaviour
     };
 
     private node[,] table;
-    public bool[,] fogVis;
-    public float[,] fogVisAlpha;
     private bool[,] visTable; // 防止太密集
 
     public List<Vector2Int> housePosArray;
@@ -75,6 +72,7 @@ public class Scene : MonoBehaviour
     public Dictionary<Vector2Int, GameObject> posToFog;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
+    public float[,] ligVis;
 
     /// <summary>
     /// 在x,y处放置house 周围不出现
@@ -104,13 +102,12 @@ public class Scene : MonoBehaviour
     {
         housePosArray = new List<Vector2Int>();
         table = new node[width, height];
-        fogVis = new bool[width, height];
-        fogVisAlpha = new float[width, height];
         visTable = new bool[width, height];
         g = new int[sizeOfHouse, sizeOfHouse];
         posToHouse = new Dictionary<Vector2Int, GameObject>();
         posToFog = new Dictionary<Vector2Int, GameObject>();
         houseOfOwner = new int[Scene.instance.sizeOfHouse];
+        ligVis = new float[width, height];
 
         // 0 stop 1 go 2 house 四个角的house数相同
         int allowTry = 100;
@@ -305,16 +302,10 @@ public class Scene : MonoBehaviour
                     case 0:
                         stop.transform.localScale = new Vector3(allScale, allScale, 1);
                         Instantiate(stop, stop.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
-
-                        fog.transform.localScale = new Vector3(allScale, allScale, 10);
-                        posToFog[new Vector2Int(i, j)] = Instantiate(fog, fog.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
                         break;
                     case 1:
                         go.transform.localScale = new Vector3(allScale, allScale, 1);
                         Instantiate(go, go.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
-
-                        fog.transform.localScale = new Vector3(allScale, allScale, 10);
-                        posToFog[new Vector2Int(i, j)] = Instantiate(fog, fog.transform.position + new Vector3(i * allScale, j * allScale), new Quaternion(), instance.transform);
                         break;
                     case 2:
                         house.transform.localScale = new Vector3(allScale, allScale, 1);
@@ -334,72 +325,9 @@ public class Scene : MonoBehaviour
         level.text = "Level " + Global.instance.lev;
         show.enabled = false;
 
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-                fogVisAlpha[i, j] = 1;
+        canvas.GetComponent<CanvasGroup>().alpha = 0;
+        StartCoroutine(alphaC());
     }
-
-    //private int timeOfAvg;
-    public void FogTest()
-    {
-        foreach (var temp in posToHouse) // 每隔一段时间，确认水泡视野
-        {
-            var script = temp.Value.GetComponent<House>();
-            if (script.owner == Global.instance.owner) script.fogSet(true);
-        }
-
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-            {
-                float ran = Random.value;
-                if (ran > 0.99f) // 0.2 * 0.08f  TODO 迷霧效果改 滤波
-                {
-                    //if (fogVisAlpha[i, j] > 0.6f)
-                        //fogVisAlpha[i, j] = 0.6f;
-                }
-                else // 0.8 * 0.02
-                {
-                    if (fogVisAlpha[i, j] < 1)
-                        fogVisAlpha[i, j] += 0.02f;
-                }
-            }
-
-        //if(timeOfAvg++ % 10 == 0)
-        //{
-        //    int[] offsetX = new int[] { 1, -1, 0, 0 };
-        //    int[] offsetY = new int[] { 0, 0, 1, -1 };
-        //    for (int i = 0; i < width; i++)
-        //        for (int j = 0; j < height; j++)
-        //        {
-        //            float sum = 0;
-        //            for (int k = 0; k < 4; k++)
-        //            {
-        //                int newX = offsetX[k] + i;
-        //                int newY = offsetY[k] + j;
-        //                if (newX >= 0 && newX < width && newY >= 0 && newY < height)
-        //                    sum += fogVisAlpha[newX, newY];
-        //            }
-        //            fogVisAlpha[i, j] = fogVisAlpha[i, j] * 0.5f + sum / 4.0f * 0.5f;
-        //        }
-        //}
-
-
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-            {
-                if (posToFog.ContainsKey(new Vector2Int(i, j)))
-                {
-                    posToFog[new Vector2Int(i, j)].SetActive(!fogVis[i, j]); // TODO
-
-                    if (Global.instance.diff == 0 || Global.instance.diff == 2) continue;
-                    if (!fogVis[i, j] && fogVisAlpha[i, j] < 1)
-                    {
-                        posToFog[new Vector2Int(i, j)].GetComponent<MeshRenderer>().material.SetFloat("_Alpha", fogVisAlpha[i, j]);
-                    }
-                }
-            }
-    }
-
 
     private IEnumerator GameEnd()
     {
@@ -472,5 +400,16 @@ public class Scene : MonoBehaviour
     {
         Global.instance.DataInit();
         SceneManager.LoadScene(0);
+    }
+
+
+
+    public Canvas canvas;
+    private IEnumerator alphaC()
+    {
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
+        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(alphaC());
     }
 }

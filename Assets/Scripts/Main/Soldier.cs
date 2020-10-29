@@ -16,11 +16,18 @@ public class Soldier : MonoBehaviour
     public int fogSize;             // 水滴侦察半径
     private float timeUse;          // 行走间隔 House.timeDisOfMove
 
+    public GameObject pointLig;
+    public GameObject sold;
+
+    private int sizeOfLig = 5;
+
     void Start()
     {
+        now = 0;
         fogSize = 2;
         timeUse = timeDisOfMove;
-        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
+        sold.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
+        pointLig.SetActive(owner == Global.instance.owner);
     }
 
     void Update()
@@ -30,29 +37,26 @@ public class Soldier : MonoBehaviour
         if (timeUse < 0)
         {
             timeUse = timeDisOfMove;
-            transform.position = new Vector3(path[now].x * Scene.instance.allScale, path[now].y * Scene.instance.allScale, basePos.z + 1);
 
-            if (owner == Global.instance.owner) // fog
+            if (now >= 0 && now < path.Count)
             {
-                int width = Scene.instance.width;
-                int height = Scene.instance.height;
-                for (int i = -fogSize; i <= fogSize; i++)
-                    for (int j = -fogSize; j <= fogSize; j++)
-                        if (i * i + j * j <= fogSize * fogSize)
+                transform.position = new Vector3(path[now].x * Scene.instance.allScale, path[now].y * Scene.instance.allScale, basePos.z + 1);
+
+                if (owner == Global.instance.owner)
+                    for (int i = -sizeOfLig; i <= sizeOfLig; i++)
+                        for (int j = -sizeOfLig; j <= sizeOfLig; j++)
                         {
                             int newX = path[now].x + i;
                             int newY = path[now].y + j;
-                            if (newX >= 0 && newX < width && newY >= 0 && newY < height)
-                            {
-                                if (Global.instance.diff == 0 || Global.instance.diff == 2) Scene.instance.fogVis[newX, newY] = true;
-                                else Scene.instance.fogVisAlpha[newX, newY] = 0;
-                            }
+                            if (newX >= 0 && newX < Scene.instance.width && newY >= 0 && newY < Scene.instance.height)
+                                Scene.instance.ligVis[newX, newY] = 2; // 持续2秒
                         }
             }
-
             now++;
+
             if (now >= path.Count)
             {
+                Music.instance.playShot(); // 水滴到达目的地
                 var script = dstHouse.GetComponent<House>();
                 if (script.owner != owner)
                 {
@@ -72,6 +76,7 @@ public class Soldier : MonoBehaviour
                     }
                     if (script.value <= 0)
                     {
+                        Music.instance.playDown();
                         if (script.owner == Global.instance.owner || owner == Global.instance.owner)
                         {
                             Effect.instance.shake();
