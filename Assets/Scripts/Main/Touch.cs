@@ -88,7 +88,8 @@ public class Touch : MonoBehaviour
                         }
                         else
                         {
-                            if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
+                            if (Global.instance.diff == 0 || Global.instance.diff == 2) 
+                                if(lastObj.name == "house(Clone)") Global.instance.isStop = false;
                             if (!Global.instance.isStop)
                             {
                                 isSelect = false;
@@ -105,7 +106,8 @@ public class Touch : MonoBehaviour
                     }
                     else
                     {
-                        if (Global.instance.diff == 0 || Global.instance.diff == 2) Global.instance.isStop = false;
+                        if (Global.instance.diff == 0 || Global.instance.diff == 2)
+                            if (lastObj.name == "house(Clone)") Global.instance.isStop = false;
                         isSelect = false;
                         panel.SetActive(false);
                         if (lastObj.name == "house(Clone)")

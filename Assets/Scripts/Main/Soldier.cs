@@ -23,6 +23,7 @@ public class Soldier : MonoBehaviour
 
     void Start()
     {
+        Scene.instance.soldierSet.Add(gameObject);
         now = 0;
         fogSize = 2;
         timeUse = timeDisOfMove;
@@ -42,7 +43,7 @@ public class Soldier : MonoBehaviour
             {
                 transform.position = new Vector3(path[now].x * Scene.instance.allScale, path[now].y * Scene.instance.allScale, basePos.z + 1);
 
-                if (owner == Global.instance.owner)
+                if (owner == Global.instance.owner) // 探测
                     for (int i = -sizeOfLig; i <= sizeOfLig; i++)
                         for (int j = -sizeOfLig; j <= sizeOfLig; j++)
                         {
@@ -51,6 +52,20 @@ public class Soldier : MonoBehaviour
                             if (newX >= 0 && newX < Scene.instance.width && newY >= 0 && newY < Scene.instance.height)
                                 Scene.instance.ligVis[newX, newY] = 2; // 持续2秒
                         }
+
+                foreach (var obj in Scene.instance.soldierSet)
+                {
+                    var script = obj.GetComponent<Soldier>();
+                    if (owner != script.owner && script.path[script.now] == path[now]) // 先判断路径
+                    {
+                        //Debug.Log("col");
+                        Scene.instance.soldierSet.Remove(obj);
+                        Scene.instance.soldierSet.Remove(gameObject);
+                        DestroyImmediate(obj);
+                        DestroyImmediate(gameObject);
+                        return;
+                    }
+                }
             }
             now++;
 
@@ -92,6 +107,8 @@ public class Soldier : MonoBehaviour
                     }
                 }
                 else script.value++;
+
+                Scene.instance.soldierSet.Remove(gameObject);
                 DestroyImmediate(gameObject);
                 return;
             }

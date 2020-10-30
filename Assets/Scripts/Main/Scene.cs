@@ -70,6 +70,7 @@ public class Scene : MonoBehaviour
     public List<Vector2Int> housePosArray;
     public Dictionary<Vector2Int, GameObject> posToHouse;
     public Dictionary<Vector2Int, GameObject> posToFog;
+    public HashSet<GameObject> soldierSet;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
     public float[,] ligVis;
@@ -108,6 +109,7 @@ public class Scene : MonoBehaviour
         posToFog = new Dictionary<Vector2Int, GameObject>();
         houseOfOwner = new int[Scene.instance.sizeOfHouse];
         ligVis = new float[width, height];
+        soldierSet = new HashSet<GameObject>();
 
         // 0 stop 1 go 2 house 四个角的house数相同
         int allowTry = 100;
