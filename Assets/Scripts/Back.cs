@@ -6,9 +6,22 @@ public class Back : MonoBehaviour
 {
     private float hitTime = 0f;
     private float x, z, a;
+    private float start, end;
+    public static Back instance;
+
+    public void changeSpeed()
+    {
+        var temp = gameObject.GetComponent<MeshRenderer>().material;
+        temp.SetFloat("_XSpeed", Load.waterSpeed);
+        temp.SetFloat("_YSpeed", Load.waterSpeed);
+    }
+
     void Start()
     {
+        instance = this;
+        changeSpeed();
         x = z = a = 0;
+        start = end = 0;
     }
 
     private IEnumerator setDrop()
@@ -18,7 +31,11 @@ public class Back : MonoBehaviour
         temp.SetFloat("_CenterU", x);
         temp.SetFloat("_CenterV", z);
         temp.SetFloat("_Amount", a);
+        temp.SetFloat("_RS", start);
+        temp.SetFloat("_RE", end);
         a -= 0.01f;
+        start += 0.025f;
+        end = start + 0.1f;
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(setDrop());
     }
@@ -42,6 +59,8 @@ public class Back : MonoBehaviour
                     x = pos.x;
                     z = pos.z;
                     a = 0.2f;
+                    start = 0;
+                    end = start + 0.1f;
                     StartCoroutine(setDrop());
                 }
             }

@@ -78,14 +78,16 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Pow: 0.1
+    - _RE: 0.4
+    - _RS: 0.3
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 5
     - _SrcBlend: 1
     - _UVSec: 0
-    - _W: 50
-    - _XSpeed: 0
-    - _YSpeed: 0.1
+    - _W: 100
+    - _XSpeed: 0.01
+    - _YSpeed: 0.01
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.21960786, g: 0.48235297, b: 0.5019608, a: 1}

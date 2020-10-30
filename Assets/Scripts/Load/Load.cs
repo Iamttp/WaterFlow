@@ -6,10 +6,7 @@ using UnityEngine.UI;
 
 public class Load : MonoBehaviour
 {
-    public Dropdown dropdownOfOwner;
-    public Dropdown dropdownOfSize;
-    public Dropdown dropdownOfCas;
-    public Dropdown dropdownOfDiff;
+    public Canvas canvas;
 
     public static int index1;
     public static int index2;
@@ -23,12 +20,31 @@ public class Load : MonoBehaviour
 
     public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f };
 
-    public Canvas canvas;
+    public static float waterSpeed;
+
+    private static bool flag = false;
 
     void Start()
     {
         Screen.SetResolution(1920, 1080, true);
         Screen.sleepTimeout = SleepTimeout.NeverSleep; // android 息屏
+
+        if(!flag)
+        {
+            flag = true;
+            Global.instance.owner = 0;
+            index1 = 0;
+            index2 = 0;
+            Global.instance.sizeOfHouse = casArray[0];
+            Global.instance.width = Global.instance.height = sizeArray[0];
+            Global.instance.diff = 0;
+
+            waterSpeed = 0.01f;
+
+            Global.instance.isShakeOpen = true;
+            Global.instance.isDeepOpen = true;
+        }
+
         canvas.GetComponent<CanvasGroup>().alpha = 0;
         StartCoroutine(alphaC());
     }
@@ -41,22 +57,17 @@ public class Load : MonoBehaviour
         StartCoroutine(alphaC());
     }
 
-    void Update()
-    {
-    }
-
-    public void loading()
+    public void loading() // 开始游戏
     {
         SceneManager.LoadScene(1);
-        Global.instance.owner = dropdownOfOwner.value;
-        index1 = dropdownOfCas.value;
-        index2 = dropdownOfSize.value;
-        Global.instance.sizeOfHouse = casArray[dropdownOfCas.value];
-        Global.instance.width = Global.instance.height = sizeArray[dropdownOfSize.value];
-        Global.instance.diff = dropdownOfDiff.value;
+    }
+    
+    public void loadOption()
+    {
+        SceneManager.LoadScene(6);
     }
 
-    public void loading2()
+    public void loading2() // 排行榜
     {
         SceneManager.LoadScene(5);
     }

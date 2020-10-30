@@ -15,7 +15,7 @@ public class Music : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             //给对象添加一个AudioSource组件
@@ -56,16 +56,4 @@ public class Music : MonoBehaviour
     {
         music.PlayOneShot(down2);
     }
-
-    public Slider slider;
-
-    public void sliderControl()
-    {
-        if (music.isPlaying)
-        {
-            //音乐播放中设置音乐音量 取值范围 0.0F到 1.0
-            music.volume = slider.value;
-        }
-    }
-
 }

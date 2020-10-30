@@ -7,22 +7,22 @@ using UnityEngine.UI;
 public class WIN : MonoBehaviour
 {
     public Text text;
-    static string[] diffs = new string[] { "NORMAL", "HARD", "EASY", "CRAZY" };
-    static string[] size2s = new string[] { "MIDDLE", "LARGE", "SMALL", "EXTRA LARGE" };
-    static string[] size1s = new string[] { "MIDDLE", "MANY", "LITTLE", "GREAT MANY" };
+    static string[] diffs = new string[] { "一般", "困难", "简单", "地狱" };
+    static string[] size2s = new string[] { "中等", "偏大", "偏小", "特大" };
+    static string[] size1s = new string[] { "中等", "偏多", "偏小", "特多" };
 
     void Start()
     {
         int num = Global.instance.getScore();
-        text.text = "YOU WIN ! Score : " + num +
-            "\nDiff LEVEL: " + diffs[Global.instance.diff] +
-            "\nMap Size: " + size2s[Load.index2] +  // 水泡数
-            "\nHouse Size: " + size1s[Load.index1] +
-            "\n\nUse Time : " + (int)(Global.instance.useTime) + "s" +
-            "\nSiege Cities ： " + Global.instance.killCas +
-            "\nLost Cities ： " + Global.instance.lostCas +
-            "\nKill Soldiers ： " + Global.instance.killS +
-            "\nLost Soldiers ： " + Global.instance.lostS;
+        text.text = "胜利 ! 分数 : " + num +
+            "\n难度等级: " + diffs[Global.instance.diff] +
+            "\n地图大小: " + size2s[Load.index2] +  // 水泡数
+            "\n水泡数目: " + size1s[Load.index1] +
+            "\n\n用时 : " + (int)(Global.instance.useTime) + "s" +
+            "\n攻占水泡 ： " + Global.instance.killCas +
+            "\n失去水泡 ： " + Global.instance.lostCas +
+            "\n消灭水滴 ： " + Global.instance.killS +
+            "\n失去水滴 ： " + Global.instance.lostS;
         LIST.write(num.ToString());
     }
 

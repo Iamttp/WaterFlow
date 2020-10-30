@@ -3,10 +3,10 @@
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
-	//噪音图
-	_NoiseTex("Texture", 2D) = "white" {}
-	//叠加颜色
-	_Color("Color",Color) = (1,1,1,1)
+		//噪音图
+		_NoiseTex("Texture", 2D) = "white" {}
+		//叠加颜色
+		_Color("Color",Color) = (1,1,1,1)
 		//亮度
 		_Light("Light", Range(0, 10)) = 2
 		//扭曲强度
@@ -24,6 +24,9 @@
 
 		_CenterU("_CenterU",Range(0,1)) = 0.2
 		_CenterV("_CenterV",Range(0,1)) = 0.3
+
+		_RS("_RS",float) = 0.5
+		_RE("_RE",float) = 1
 	}
 
 		SubShader
@@ -72,6 +75,9 @@
 			float _CenterV;
 			float _CenterU;
 
+			float _RS;
+			float _RE;
+
 			v2f vert(appdata v)
 			{
 				v2f o;
@@ -86,11 +92,12 @@
 				float2 center_uv = float2(_CenterU, _CenterV);
 				float2 dt = center_uv - i.uv;
 				float len = sqrt(dot(dt, dt));
-				float amount = max(_Amount, _Amount / pow(0.01 + len * _Speed,_Pow)); // + 0.01 防止为0 衰减
-				if (amount < _Flag) amount = 0; // 振幅小于0.1表示没有
+				if (len > _RS && len < _RE) {
+					float amount = max(_Amount, _Amount / pow(0.01 + len * _Speed, _Pow)); // + 0.01 防止为0 衰减
+					if (amount < _Flag) amount = 0; // 振幅小于0.1表示没有
 
-				i.uv.x += amount * cos(len * _W - _Time.y);
-
+					i.uv.x += amount * cos(len * _W - _Time.y);
+				}
 				//根据时间和偏移速度获取噪音图的颜色作为uv偏移
 				fixed4 noise_col = tex2D(_NoiseTex, i.uv + fixed2(_Time.y * _XSpeed, _Time.y * _YSpeed));
 				//计算uv偏移的颜色和亮度和附加颜色计算

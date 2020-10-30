@@ -108,23 +108,11 @@ public class Global : MonoBehaviour
             instance = this;
             DataInit();
             Application.targetFrameRate = fps;
-            isShakeOpen = true;
-            isDeepOpen = true;
         }
     }
 
     void Update()
     {
-    }
-
-    public void clickIsDeep()
-    {
-        isShakeOpen = !isShakeOpen;
-    }
-
-    public void clickIsShake()
-    {
-        isDeepOpen = !isDeepOpen;
     }
 
     public int getScore()
