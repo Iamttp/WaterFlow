@@ -56,9 +56,10 @@ public class Soldier : MonoBehaviour
                 foreach (var obj in Scene.instance.soldierSet)
                 {
                     var script = obj.GetComponent<Soldier>();
-                    if (owner != script.owner && script.path[script.now] == path[now]) // 先判断路径
+                    if (owner != script.owner && script.path[script.now] == path[now]) // 先路径位置
                     {
                         //Debug.Log("col");
+                        Music.instance.playShotB();
                         Scene.instance.soldierSet.Remove(obj);
                         Scene.instance.soldierSet.Remove(gameObject);
                         DestroyImmediate(obj);

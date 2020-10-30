@@ -563,7 +563,6 @@ MonoBehaviour:
   down: {fileID: 0}
   down2: {fileID: 0}
   la: []
-  slider: {fileID: 0}
 --- !u!1 &561506054
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +700,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 300
-    m_FontStyle: 1
+    m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 300
@@ -711,7 +710,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6C34     \u57DF"
+  m_Text: Water Flow
 --- !u!222 &661734526
 CanvasRenderer:
   m_ObjectHideFlags: 0
