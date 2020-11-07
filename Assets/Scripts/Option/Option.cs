@@ -38,7 +38,8 @@ public class Option : MonoBehaviour
 
     private IEnumerator alphaC()
     {
-        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        if (canvas == null) yield break;
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.9f) yield break;
         canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
         yield return new WaitForSeconds(0.05f);
         StartCoroutine(alphaC());

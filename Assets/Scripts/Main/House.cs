@@ -213,6 +213,10 @@ public class House : MonoBehaviour
                 }
             }
         }
-        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), value.ToString() + "/" + maxValue.ToString(), style2);
+
+        if(value >= 10) 
+            GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), value.ToString() + "/" + maxValue.ToString(), style2);
+        else
+            GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 120, 70), value.ToString() + "/" + maxValue.ToString(), style2);
     }
 }

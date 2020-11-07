@@ -357,8 +357,8 @@ public class Scene : MonoBehaviour
 
     void Update()
     {
-        if (Global.instance.isStop) stopButton.text = "START";
-        else stopButton.text = "STOP";
+        if (Global.instance.isStop) stopButton.text = "继续";
+        else stopButton.text = "停止";
         if (Global.instance.isStop) return;
         int num = 0;
         for (int i = 0; i < housePosArray.Count; i++)
@@ -396,8 +396,8 @@ public class Scene : MonoBehaviour
     public void stopFun()
     {
         Global.instance.isStop = !Global.instance.isStop;
-        if (Global.instance.isStop) stopButton.text = "START";
-        else stopButton.text = "STOP";
+        if (Global.instance.isStop) stopButton.text = "继续";
+        else stopButton.text = "停止";
     }
 
     public void backFun()
@@ -411,7 +411,8 @@ public class Scene : MonoBehaviour
     public Canvas canvas;
     private IEnumerator alphaC()
     {
-        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        if (canvas == null) yield break;
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.9f) yield break;
         canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
         yield return new WaitForSeconds(0.05f);
         StartCoroutine(alphaC());

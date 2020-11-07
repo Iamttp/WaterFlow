@@ -29,7 +29,7 @@ public class Load : MonoBehaviour
         Screen.SetResolution(1920, 1080, true);
         Screen.sleepTimeout = SleepTimeout.NeverSleep; // android 息屏
 
-        if(!flag)
+        if (!flag)
         {
             flag = true;
             Global.instance.owner = 0;
@@ -51,7 +51,8 @@ public class Load : MonoBehaviour
 
     private IEnumerator alphaC()
     {
-        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.8f) yield break;
+        if (canvas == null) yield break;
+        if (canvas.GetComponent<CanvasGroup>().alpha >= 0.9f) yield break;
         canvas.GetComponent<CanvasGroup>().alpha += 0.1f;
         yield return new WaitForSeconds(0.05f);
         StartCoroutine(alphaC());
@@ -61,7 +62,7 @@ public class Load : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
-    
+
     public void loadOption()
     {
         SceneManager.LoadScene(6);
