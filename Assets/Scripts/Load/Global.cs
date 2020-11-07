@@ -6,6 +6,8 @@ public class Global : MonoBehaviour
 {
     public static Global instance;
 
+    public bool isRandMap;
+
     public int fps;
 
     public int lev;
@@ -59,6 +61,8 @@ public class Global : MonoBehaviour
     public int sizeOfHouse;
     public int diff;
 
+    public Color[] colorTable;      // 不同势力颜色索引
+
     public void DataInit()
     {
         useTime = 0;
@@ -83,6 +87,7 @@ public class Global : MonoBehaviour
 
         ls = new List<node>();
         mp = new Dictionary<string, node>();
+
         ls.Add(new node("attack", "水滴双倍攻击力几率增加15%", buffOfAttack));
         ls.Add(new node("moveSpeed", "水滴移动速度增加50%", buffOfMoveSpeed));
         ls.Add(new node("addSpeed", "水泡中水滴增加速度15%", buffOfAddSpeed));

@@ -27,7 +27,7 @@ public class Soldier : MonoBehaviour
         now = 0;
         fogSize = 2;
         timeUse = timeDisOfMove;
-        sold.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
+        sold.GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[owner]);
         pointLig.SetActive(owner == Global.instance.owner);
     }
 

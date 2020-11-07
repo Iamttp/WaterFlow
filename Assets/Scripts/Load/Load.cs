@@ -60,7 +60,12 @@ public class Load : MonoBehaviour
 
     public void loading() // 开始游戏
     {
-        SceneManager.LoadScene(1);
+        Global.instance.isRandMap = false;
+        SceneManager.LoadScene(7);
+
+
+        //Global.instance.isRandMap = true;
+        //SceneManager.LoadScene(1);
     }
 
     public void loadOption()

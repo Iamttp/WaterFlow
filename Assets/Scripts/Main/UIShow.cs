@@ -24,7 +24,7 @@ public class UIShow : MonoBehaviour
             gameObjects[i] = Instantiate(cube, transform);
             gameObjects[i].transform.position += new Vector3(i - len / 2, 0, 0);
         }
-        StaticBatchingUtility.Combine(gameObject); // 静态批处理
+        //StaticBatchingUtility.Combine(gameObject); // 静态批处理
         transform.localScale = new Vector3(Load.camShowScale[Load.index1], 1, 1);
     }
 
@@ -42,6 +42,6 @@ public class UIShow : MonoBehaviour
         int index = 0;
         for (int j = 0; j < 4; j++)
             while (table[j]-- > 0)
-                gameObjects[index++].GetComponent<MeshRenderer>().material.SetColor("_Color", scene.colorTable[j]);
+                gameObjects[index++].GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[j]);
     }
 }

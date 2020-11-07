@@ -76,7 +76,7 @@ public class House : MonoBehaviour
         timeDisOfAdd = 1f / addRate;
         timeDisOfMove = 0.1f / moveRate;
 
-        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Scene.instance.colorTable[owner]);
+        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[owner]);
         pointLig.SetActive(owner == Global.instance.owner);
     }
 
@@ -104,7 +104,7 @@ public class House : MonoBehaviour
                     {
                         int newX = pos.x + i;
                         int newY = pos.y + j;
-                        if (newX >= 0 && newX < Scene.instance.width && newY >= 0 && newY < Scene.instance.height)
+                        if (newX >= 0 && newX < Global.instance.width && newY >= 0 && newY < Global.instance.height)
                             Scene.instance.ligVis[newX, newY] = 2; // 持续2秒
                     }
         }
@@ -113,7 +113,7 @@ public class House : MonoBehaviour
     void OnTouched()
     {
         Color temp;
-        for (int k = 0; k < Scene.instance.sizeOfHouse; k++)
+        for (int k = 0; k < Global.instance.sizeOfHouse; k++)
             if (Scene.instance.g[index, k] != 0)
             {
                 GameObject obj = Scene.instance.posToHouse[Scene.instance.housePosArray[k]];
@@ -141,7 +141,7 @@ public class House : MonoBehaviour
     void UnTouched()
     {
         Color temp;
-        for (int k = 0; k < Scene.instance.sizeOfHouse; k++)
+        for (int k = 0; k < Global.instance.sizeOfHouse; k++)
         {
             GameObject obj = Scene.instance.posToHouse[Scene.instance.housePosArray[k]];
             temp = obj.GetComponent<MeshRenderer>().material.GetColor("_Color");

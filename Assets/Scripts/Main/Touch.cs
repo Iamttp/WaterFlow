@@ -129,7 +129,7 @@ public class Touch : MonoBehaviour
         sizeText.text = "水滴数 : " + script.value + " / " + script.maxValue;
         attackText.text = "水滴暴击率 : " + Mathf.RoundToInt(script.attackRate * 100) + "%";
 
-        var tempColor = Scene.instance.colorTable[script.owner];
+        var tempColor = Global.instance.colorTable[script.owner];
         tempColor.a /= 3;
         panel.GetComponent<Image>().color = tempColor;
     }

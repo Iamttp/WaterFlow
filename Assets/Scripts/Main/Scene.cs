@@ -57,19 +57,17 @@ public class Scene : MonoBehaviour
     public float allScale;
 
     public int[] houseOfOwner;
-    public Color[] colorTable;      // 不同势力颜色索引
-    struct node
+    public struct node
     {
         public int type;
         public int indexOfArray;
     };
 
-    private node[,] table;
+    public node[,] table;
     private bool[,] visTable; // 防止太密集
 
     public List<Vector2Int> housePosArray;
     public Dictionary<Vector2Int, GameObject> posToHouse;
-    public Dictionary<Vector2Int, GameObject> posToFog;
     public HashSet<GameObject> soldierSet;
     public List<Vector2Int>[,] houseRoadPath;
     public int[,] g; // 二维数组存图
@@ -106,10 +104,9 @@ public class Scene : MonoBehaviour
         visTable = new bool[width, height];
         g = new int[sizeOfHouse, sizeOfHouse];
         posToHouse = new Dictionary<Vector2Int, GameObject>();
-        posToFog = new Dictionary<Vector2Int, GameObject>();
         houseOfOwner = new int[Scene.instance.sizeOfHouse];
-        ligVis = new float[width, height];
         soldierSet = new HashSet<GameObject>();
+        ligVis = new float[width, height];
 
         // 0 stop 1 go 2 house 四个角的house数相同
         int allowTry = 100;
@@ -283,15 +280,13 @@ public class Scene : MonoBehaviour
     void Awake()
     {
         instance = this;
-        Screen.SetResolution(1920, 1080, true);
+        //Screen.SetResolution(1920, 1080, true);
         width = Global.instance.width;
         height = Global.instance.height;
         sizeOfHouse = Global.instance.sizeOfHouse;
         var i = Load.index2;
         Camera.main.transform.position = new Vector3(Load.camX[i], Load.camY[i], 150);
         Camera.main.orthographicSize = Load.camSize[i];
-        if (initHouseData())
-            initRoadData();
     }
 
     void renderScene()
@@ -325,7 +320,17 @@ public class Scene : MonoBehaviour
 
     void Start()
     {
-        renderScene();
+        if (Global.instance.isRandMap)
+        {
+            if (initHouseData())
+                initRoadData();
+            renderScene();
+        }
+        else
+        {
+            // TODO read
+            renderScene();
+        }
         level.text = "Level " + Global.instance.lev;
         show.enabled = false;
 
@@ -365,7 +370,7 @@ public class Scene : MonoBehaviour
         {
             houseOfOwner[i] = posToHouse[housePosArray[i]].GetComponent<House>().owner;
             if (houseOfOwner[i] == Global.instance.owner) num++;
-            posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", colorTable[houseOfOwner[i]]);
+            posToHouse[housePosArray[i]].GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[houseOfOwner[i]]);
         }
         if (Global.instance.flag) return;
         if (num == housePosArray.Count)
