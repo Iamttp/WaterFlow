@@ -107,57 +107,48 @@ public class Creation : MonoBehaviour
 
     public void test()
     {
+        houseArray = new List<Vector2Int>();
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                if (tableOfType[i, j] == 2)
+                {
+                    houseArray.Add(new Vector2Int(i, j));
+                }
+        int num = 0;
+        int firstOwner = 0;
+        for (int i = 0; i < houseArray.Count; i++)
+        {
+            int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
+            if (i == 0) firstOwner = owner;
+            if (owner == firstOwner) num++;
+        }
+        if (num == houseArray.Count) return; // 若全为
+
+        houseRoadPath = new List<Vector2Int>[houseArray.Count, houseArray.Count];
+        for (int i = 0; i < houseArray.Count; i++)
+            for (int j = 0; j < houseArray.Count; j++)
+            {
+                int bi = Mathf.RoundToInt(houseArray[i].x);
+                int bj = Mathf.RoundToInt(houseArray[i].y);
+                int ei = Mathf.RoundToInt(houseArray[j].x);
+                int ej = Mathf.RoundToInt(houseArray[j].y);
+                string s1 = "[" + bi + "," + bj + "],[" + ei + "," + ej + "]";
+                string s2 = "[" + ei + "," + ej + "],[" + bi + "," + bj + "]";
+                if (dic.ContainsKey(s1)) houseRoadPath[i, j] = dic[s1];
+                if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
+            }
+
+        // TODO 保存地图信息
+        // https://www.xuanyusong.com/archives/831
+
+        Global.instance.mapName = System.DateTime.Now.ToString();
+
         try
         {
-            houseArray = new List<Vector2Int>();
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    if (tableOfType[i, j] == 2)
-                    {
-                        houseArray.Add(new Vector2Int(i, j));
-                    }
-            int num = 0;
-            int firstOwner = 0;
-            for (int i = 0; i < houseArray.Count; i++)
-            {
-                int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
-                if (i == 0) firstOwner = owner;
-                if (owner == firstOwner) num++;
-            }
-            if (num == houseArray.Count) return; // 若全为
-
-            houseRoadPath = new List<Vector2Int>[houseArray.Count, houseArray.Count];
-            for (int i = 0; i < houseArray.Count; i++)
-                for (int j = 0; j < houseArray.Count; j++)
-                {
-                    int bi = Mathf.RoundToInt(houseArray[i].x);
-                    int bj = Mathf.RoundToInt(houseArray[i].y);
-                    int ei = Mathf.RoundToInt(houseArray[j].x);
-                    int ej = Mathf.RoundToInt(houseArray[j].y);
-                    string s1 = "[" + bi + "," + bj + "],[" + ei + "," + ej + "]";
-                    string s2 = "[" + ei + "," + ej + "],[" + bi + "," + bj + "]";
-                    if (dic.ContainsKey(s1)) houseRoadPath[i, j] = dic[s1];
-                    if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
-                }
-
-            // TODO 保存地图信息
-            // https://www.xuanyusong.com/archives/831
-
-            Global.instance.mapName = System.DateTime.Now.ToString();
-
             string appDBPath = Application.persistentDataPath + "/iamttp.db";
-            DbAccess db;
-            if (!System.IO.File.Exists(appDBPath))
-            {
-                db = new DbAccess("URI=file:" + appDBPath);
-                db.CreateTable("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, new string[] { "text", "integer", "integer", "text" });
-                db.CreateTable("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "text", "integer", "integer", "text" });
-                db.CreateTable("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, new string[] { "text", "integer", "integer", "integer", "integer" });
-            }
-            else
-            {
-                db = new DbAccess("URI=file:" + appDBPath);
-            }
+            DbAccess db = new DbAccess("URI=file:" + appDBPath);
+
+            Debug.Log("-1-");
 
             int index = 0;
             List<string[]> insertStr = new List<string[]>();
@@ -165,10 +156,12 @@ public class Creation : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(),
-                    "'" + tableOfType[i, j].ToString() + "'", "'" + index.ToString() + "'" });
+                    tableOfType[i, j].ToString(), index.ToString() });
                     if (tableOfType[i, j] == 2) index++;
                 }
-            db.InsertIntoAll("mapTable", insertStr);
+            db.InsertIntoAll("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, insertStr);
+
+            Debug.Log("-2-");
 
             insertStr = new List<string[]>();
             for (int i = 0; i < houseArray.Count; i++)
@@ -176,7 +169,9 @@ public class Creation : MonoBehaviour
                 int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
                 insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), owner.ToString(), "'" + houseArray[i].ToString() + "'" });
             }
-            db.InsertIntoAll("housePosArray", insertStr);
+            db.InsertIntoAll("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, insertStr);
+
+            Debug.Log("-3-");
 
             insertStr = new List<string[]>();
             for (int i = 0; i < houseArray.Count; i++)
@@ -184,7 +179,7 @@ public class Creation : MonoBehaviour
                 {
                     insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(), "'" + GetString(houseRoadPath[i, j]) + "'" });
                 }
-            db.InsertIntoAll("houseRoadPath", insertStr);
+            db.InsertIntoAll("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, insertStr);
 
             db.CloseSqlConnection();
 
@@ -193,8 +188,7 @@ public class Creation : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            bugText.text = ex.ToString() + "\n" + ex.Message;
-
+            bugText.text = ex.Message;
         }
     }
 

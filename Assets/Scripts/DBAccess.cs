@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using Mono.Data.Sqlite;
 using System.Collections.Generic;
+using System.Text;
 
 public class DbAccess
 
@@ -124,21 +125,43 @@ public class DbAccess
 
     }
 
-    public SqliteDataReader InsertIntoAll(string tableName, List<string[]> valuess)
+    public SqliteDataReader InsertIntoAllSplit(string tableName, string[] cols, List<string[]> valuess)
     {
-        string query = "INSERT INTO " + tableName + " VALUES (";
+        StringBuilder query = new StringBuilder();
+        query.Append("INSERT INTO " + tableName + " (");
+
+        query.Append(cols[0]);
+        for (int i = 1; i < cols.Length; ++i)
+        {
+            query.Append(", " + cols[i]);
+        }
+        query.Append(")");
+
         int k = 0;
         foreach (string[] values in valuess)
         {
-            query += values[0];
+            query.Append(" select ");
+            query.Append(values[0]);
             for (int i = 1; i < values.Length; ++i)
             {
-                query += ", " + values[i];
+                query.Append(", " + values[i]);
             }
-            query += ")";
-            if(++k != valuess.Count) query += ", (";
+            if (++k != valuess.Count) query.Append(" union all ");
         }
-        return ExecuteQuery(query);
+        return ExecuteQuery(query.ToString());
+    }
+
+    public void InsertIntoAll(string tableName, string[] cols, List<string[]> valuess)
+    {
+        int begin = 0;
+        while (begin < valuess.Count)
+        {
+            List<string[]> sValuess = new List<string[]>();
+            for (int i = begin; i < begin + 450 && i < valuess.Count; i++)
+                sValuess.Add(valuess[i]);
+            InsertIntoAllSplit(tableName, cols, sValuess);
+            begin += 450;
+        }
     }
 
     public SqliteDataReader UpdateInto(string tableName, string[] cols, string[] colsvalues, string selectkey, string selectvalue)

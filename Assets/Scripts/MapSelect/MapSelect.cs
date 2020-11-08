@@ -15,27 +15,53 @@ public class MapSelect : MonoBehaviour
     void Start()
     {
         string appDBPath = Application.persistentDataPath + "/iamttp.db";
+        DbAccess db;
+
         if (System.IO.File.Exists(appDBPath))
         {
-            DbAccess db = new DbAccess("URI=file:" + appDBPath);
-
-            using (SqliteDataReader sqReader = db.ExecuteQuery("select mapIndex from mapTable group by mapIndex"))
-            {
-                while (sqReader.Read())
-                {
-                    string str = sqReader.GetString(sqReader.GetOrdinal("mapIndex"));
-                    Button NewButton = Instantiate(ButtonPrefab);
-                    NewButton.transform.SetParent(panel.transform);
-                    NewButton.GetComponentInChildren<Text>().text = str;
-                    NewButton.onClick.AddListener(delegate ()
-                    {
-                        OnClickAddButton(NewButton);
-                    });
-                }
-                sqReader.Close();
-            }
-            db.CloseSqlConnection();
+            db = new DbAccess("URI=file:" + appDBPath);
         }
+        else
+        {
+            Debug.Log("ready copy db");
+            //如果运行在编辑器中, 不存在的话直接创建
+#if UNITY_EDITOR
+            db = new DbAccess("URI=file:" + appDBPath);
+            db.CreateTable("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, new string[] { "text", "integer", "integer", "text" });
+            db.CreateTable("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "text", "integer", "integer", "text" });
+            db.CreateTable("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, new string[] { "text", "integer", "integer", "integer", "integer" });
+            //如果运行在Android设备中， 不存在的话拷贝
+#elif UNITY_ANDROID
+
+            //用www先从Unity中下载到数据库
+            WWW loadDB = new WWW("jar:file://" + Application.dataPath + "!/assets/" + "iamttp.db");
+
+            //拷贝至规定的地方
+            System.IO.File.WriteAllBytes(appDBPath, loadDB.bytes);
+
+            //在这里重新得到db对象。
+            db = new DbAccess("URI=file:" + appDBPath);
+
+            Debug.Log("copy db");
+#endif
+        }
+
+        using (SqliteDataReader sqReader = db.ExecuteQuery("select mapIndex from mapTable group by mapIndex"))
+        {
+            while (sqReader.Read())
+            {
+                string str = sqReader.GetString(sqReader.GetOrdinal("mapIndex"));
+                Button NewButton = Instantiate(ButtonPrefab);
+                NewButton.transform.SetParent(panel.transform);
+                NewButton.GetComponentInChildren<Text>().text = str;
+                NewButton.onClick.AddListener(delegate ()
+                {
+                    OnClickAddButton(NewButton);
+                });
+            }
+            sqReader.Close();
+        }
+        db.CloseSqlConnection();
     }
 
     void OnClickAddButton(Button NewButton)
