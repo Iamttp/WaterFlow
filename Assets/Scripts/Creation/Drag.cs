@@ -9,7 +9,8 @@ public class Drag : MonoBehaviour
     Vector3 lastPos;
 
     public int bi, bj;
-    public int sizeOfVis;           // 用于控制House分散放置 3
+    private int sizeOfVis = 4;           // 用于控制House分散放置
+    public int owner;
 
     public int[,] tableOfType;
 
@@ -17,6 +18,9 @@ public class Drag : MonoBehaviour
     {
         tableOfType = Creation.instance.tableOfType;
         lastPos = startPos;
+
+        //owner = Random.Range(0, 4);
+        gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[owner]);
     }
 
     void Update()
@@ -26,8 +30,18 @@ public class Drag : MonoBehaviour
 
     private Vector3 screenPos;
     private Vector3 offset;
+
+    float isDownTime = 0;
+
     void OnMouseDown()
     {
+        if (Time.time - isDownTime < 0.3f) // 双击
+        {
+            owner = (owner + 1) % 4;
+            gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[owner]);
+        }
+        isDownTime = Time.time;
+
         startPos = transform.position;
         bi = Mathf.RoundToInt(startPos.x);
         bj = Mathf.RoundToInt(startPos.y);
@@ -43,7 +57,7 @@ public class Drag : MonoBehaviour
         int ej = Mathf.RoundToInt(transform.position.y);
         transform.position = new Vector3(ei, ej, transform.position.z);
         if (lastPos == transform.position) return;
-        if (ei < 0 || ei >= Global.instance.width || ej < 0 || ej >= Global.instance.height) return;
+        if (ei < 0 || ei >= Creation.instance.width || ej < 0 || ej >= Creation.instance.height) return;
 
         if (placeRoad(new Vector2Int(bi, bj), new Vector2Int(ei, ej), out path))
         {
@@ -66,7 +80,7 @@ public class Drag : MonoBehaviour
                 {
                     tableOfType[pos.x, pos.y] = 0;
                 }
-                tableOfType[ei, ej] = 0; // TODO
+                tableOfType[ei, ej] = 0;
             }
         }
         lastPos = transform.position;
@@ -74,10 +88,30 @@ public class Drag : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (path.Count == 0) return;
+        if (path == null || path.Count == 0) return;
 
         int ei = Mathf.RoundToInt(transform.position.x);
         int ej = Mathf.RoundToInt(transform.position.y);
+        if (!(ei >= 0 && ei < Creation.instance.width && ej >= 0 && ej < Creation.instance.height))
+        {
+            ei = bi;
+            ej = bj;
+        }
+        for (int offsetY = -sizeOfVis; offsetY <= sizeOfVis; offsetY++)
+            for (int offsetX = -sizeOfVis; offsetX <= sizeOfVis; offsetX++)
+            {
+                int newX = offsetX + ei;
+                int newY = offsetY + ej;
+                if (newX >= 0 && newX < Creation.instance.width && newY >= 0 && newY < Creation.instance.height)
+                    if (tableOfType[newX, newY] == 2)
+                    {
+                        ei = newX;
+                        ej = newY;
+                        placeRoad(new Vector2Int(bi, bj), new Vector2Int(ei, ej), out path);
+                        goto NEXT;
+                    }
+            }
+        NEXT:
         tableOfType[ei, ej] = 2;
 
         Creation.instance.dic["[" + bi + "," + bj + "],[" + ei + "," + ej + "]"] = new List<Vector2Int>(path); // TODO key 格式
@@ -160,15 +194,9 @@ public class Drag : MonoBehaviour
         if (isReverse) path.Reverse();
 
         // 两条道路间周围存在道路或者水泡，返回false
-        for (int i = 4; i < path.Count - 4; i++) // TODO
-            for (int offsetY = -sizeOfVis / 2; offsetY <= sizeOfVis / 2; offsetY++)
-                for (int offsetX = -sizeOfVis / 2; offsetX <= sizeOfVis / 2; offsetX++)
-                {
-                    int newX = offsetX + path[i].x;
-                    int newY = offsetY + path[i].y;
-                    if (tableOfType[newX, newY] == 1 || tableOfType[newX, newY] == 2)
-                        return false;
-                }
+        for (int i = 4; i < path.Count - 4; i++)
+            if (tableOfType[path[i].x, path[i].y] == 1 || tableOfType[path[i].x, path[i].y] == 2)
+                return false;
         return true;
     }
 }

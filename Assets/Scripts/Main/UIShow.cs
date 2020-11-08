@@ -17,7 +17,7 @@ public class UIShow : MonoBehaviour
     void Start()
     {
         scene = Scene.instance;
-        len = scene.housePosArray.Count;
+        len = Global.instance.sizeOfHouse;
         gameObjects = new GameObject[len];
         for (int i = 0; i < len; i++)
         {
@@ -25,7 +25,7 @@ public class UIShow : MonoBehaviour
             gameObjects[i].transform.position += new Vector3(i - len / 2, 0, 0);
         }
         //StaticBatchingUtility.Combine(gameObject); // 静态批处理
-        transform.localScale = new Vector3(Load.camShowScale[Load.index1], 1, 1);
+        transform.localScale = new Vector3(7.2f / len, 1, 1);
     }
 
     void Update()

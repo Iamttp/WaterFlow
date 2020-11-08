@@ -343,7 +343,7 @@ public class Scene : MonoBehaviour
         string appDBPath = Application.persistentDataPath + "/iamttp.db";
         DbAccess db = new DbAccess("URI=file:" + appDBPath);
 
-        int size = 0; // TODO
+        int size = 0;
         sizeOfHouse = 0;
         using (SqliteDataReader sqReader = db.SelectWhere("mapTable", new string[] { "i", "j", "type", "indexOfArray" }, new string[] { "mapIndex" }, new string[] { "=" }, new string[] { Global.instance.mapName }))
         {
@@ -433,6 +433,8 @@ public class Scene : MonoBehaviour
             if (initHouseData())
                 initRoadData();
             renderScene();
+            //Global.instance.sizeOfHouse = 8; // TODO TODO 会出现先自定义后，水泡数bug
+            sizeOfHouse = Global.instance.sizeOfHouse;
         }
         else
         {
@@ -444,6 +446,7 @@ public class Scene : MonoBehaviour
 
         canvas.GetComponent<CanvasGroup>().alpha = 0;
         StartCoroutine(alphaC());
+        Global.instance.flag = false;
     }
 
     private IEnumerator GameEnd()

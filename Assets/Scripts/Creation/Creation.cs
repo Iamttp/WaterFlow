@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Creation : MonoBehaviour
 {
-    private int width;
-    private int height;
+    public int width;
+    public int height;
 
     public int[,] tableOfType;
-    public GameObject[,] tableOfObj;
+    private GameObject[,] tableOfObj;
     public Dictionary<string, List<Vector2Int>> dic;
 
     public static Creation instance;
@@ -21,9 +21,15 @@ public class Creation : MonoBehaviour
     void Awake()
     {
         instance = this;
-
-        width = Global.instance.width;
-        height = Global.instance.height;
+        if (Global.instance == null) // 测试用
+        {
+            width = height = 40;
+        }
+        else
+        {
+            width = Global.instance.width;
+            height = Global.instance.height;
+        }
 
         var index = Load.index2;
         Camera.main.transform.position = new Vector3(Load.camX[index], Load.camY[index], 150);
@@ -94,13 +100,8 @@ public class Creation : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void save()
-    {
-
-    }
-
-    public List<Vector2Int> houseArray;
-    public List<Vector2Int>[,] houseRoadPath;
+    private List<Vector2Int> houseArray;
+    private List<Vector2Int>[,] houseRoadPath;
 
     public void test()
     {
@@ -111,6 +112,16 @@ public class Creation : MonoBehaviour
                 {
                     houseArray.Add(new Vector2Int(i, j));
                 }
+
+        int num = 0;
+        int firstOwner = 0;
+        for (int i = 0; i < houseArray.Count; i++)
+        {
+            int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
+            if (i == 0) firstOwner = owner;
+            if (owner == firstOwner) num++;
+        }
+        if (num == houseArray.Count) return; // 若全为
 
         houseRoadPath = new List<Vector2Int>[houseArray.Count, houseArray.Count];
         for (int i = 0; i < houseArray.Count; i++)
@@ -126,9 +137,8 @@ public class Creation : MonoBehaviour
                 if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
             }
 
-        // TODO ------------------------------------------------------------ 保存地图信息 TODO
+        // TODO 保存地图信息
         // https://www.xuanyusong.com/archives/831
-        // TODO name
 
         Global.instance.mapName = System.DateTime.Now.ToString();
 
@@ -160,7 +170,8 @@ public class Creation : MonoBehaviour
         insertStr = new List<string[]>();
         for (int i = 0; i < houseArray.Count; i++)
         {
-            insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), Random.Range(0, 4).ToString(), "'" + houseArray[i].ToString() + "'" });
+            int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
+            insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), owner.ToString(), "'" + houseArray[i].ToString() + "'" });
         }
         db.InsertIntoAll("housePosArray", insertStr);
 

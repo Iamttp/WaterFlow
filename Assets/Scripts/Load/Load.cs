@@ -18,7 +18,7 @@ public class Load : MonoBehaviour
     public static int[] camX = new int[] { 20, 30, 10, 40 };
     public static int[] camY = new int[] { 20, 30, 10, 40 };
 
-    public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f };
+    //public static float[] camShowScale = new float[] { 0.9f, 0.6f, 1.8f, 0.45f };
 
     public static float waterSpeed;
 
@@ -60,12 +60,7 @@ public class Load : MonoBehaviour
 
     public void loading() // 开始游戏
     {
-        Global.instance.isRandMap = false;
-        SceneManager.LoadScene(7);
-
-
-        //Global.instance.isRandMap = true;
-        //SceneManager.LoadScene(1);
+        SceneManager.LoadScene(8);
     }
 
     public void loadOption()
