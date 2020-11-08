@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -75,7 +76,7 @@ public class Creation : MonoBehaviour
                         break;
                 }
             }
-        if(!isHouse) StaticBatchingUtility.Combine(gameObject); // 释放鼠标时，静态批处理
+        if (!isHouse) StaticBatchingUtility.Combine(gameObject); // 释放鼠标时，静态批处理
     }
 
     void Start()
@@ -125,36 +126,65 @@ public class Creation : MonoBehaviour
                 if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
             }
 
-        //// TODO ------------------------------------------------------------ 保存地图信息 TODO
-        //Global.instance.isRandMap = false;
+        // TODO ------------------------------------------------------------ 保存地图信息 TODO
+        // https://www.xuanyusong.com/archives/831
+        // TODO name
 
-        //var housePosArray = new List<Vector2Int>();
-        //var table = new Scene.node[width, height];
-        ////var g = new int[houseArray.Count, houseArray.Count]; // 保存水泡间路径大小   g[k, i] = g[i, k] = houseRoadPath[i, k].Count;
-        ////var posToHouse = new Dictionary<Vector2Int, GameObject>(); // Render中 不需要
-        //var houseOfOwner = new int[houseArray.Count];
-        ////var soldierSet = new HashSet<GameObject>(); // Soldier中 不需要
-        ////var ligVis = new float[width, height]; // Render 不需要
+        Global.instance.mapName = System.DateTime.Now.ToString();
 
-        //for (int i = 0; i < width; i++)
-        //    for (int j = 0; j < height; j++)
-        //        table[i, j].type = tableOfType[i, j];
+        string appDBPath = Application.persistentDataPath + "/iamttp.db";
+        DbAccess db;
+        if (!System.IO.File.Exists(appDBPath))
+        {
+            db = new DbAccess("URI=file:" + appDBPath);
+            db.CreateTable("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, new string[] { "text", "integer", "integer", "text" });
+            db.CreateTable("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "text", "integer", "integer", "text" });
+            db.CreateTable("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, new string[] { "text", "integer", "integer", "integer", "integer" });
+        }
+        else
+        {
+            db = new DbAccess("URI=file:" + appDBPath);
+        }
 
-        //foreach (var item in houseArray)
-        //{
-        //    housePosArray.Add(item);
-        //    table[item.x, item.y].type = 2;
-        //    table[item.x, item.y].indexOfArray = housePosArray.Count - 1;
-        //}
+        int index = 0;
+        List<string[]> insertStr = new List<string[]>();
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+            {
+                insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(),
+                    "'" + tableOfType[i, j].ToString() + "'", "'" + index.ToString() + "'" });
+                if (tableOfType[i, j] == 2) index++;
+            }
+        db.InsertIntoAll("mapTable", insertStr);
 
-        //for (int i = 0; i < houseArray.Count; i++)
-        //{
-        //    houseOfOwner[i] = UnityEngine.Random.Range(0, 4);
-        //}
+        insertStr = new List<string[]>();
+        for (int i = 0; i < houseArray.Count; i++)
+        {
+            insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), Random.Range(0, 4).ToString(), "'" + houseArray[i].ToString() + "'" });
+        }
+        db.InsertIntoAll("housePosArray", insertStr);
 
-        ////for (int i = 0; i < houseArray.Count; i++)
-        ////    for (int j = 0; j < houseArray.Count; j++)
-        ////        if (i != j && g[i, j] == 0)
-        ////            g[i, j] = g[j, i] = houseRoadPath[i, j].Count;
+        insertStr = new List<string[]>();
+        for (int i = 0; i < houseArray.Count; i++)
+            for (int j = 0; j < houseArray.Count; j++)
+            {
+                insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(), "'" + GetString(houseRoadPath[i, j]) + "'" });
+            }
+        db.InsertIntoAll("houseRoadPath", insertStr);
+
+        db.CloseSqlConnection();
+
+        Global.instance.isRandMap = false;
+        SceneManager.LoadScene(1);
     }
+
+    private static string GetString(List<Vector2Int> lists)
+    {
+        StringBuilder res = new StringBuilder();
+        if (lists != null)
+            foreach (var item in lists)
+                res.Append(item.ToString()).Append("&");
+        return res.ToString();
+    }
+
 }

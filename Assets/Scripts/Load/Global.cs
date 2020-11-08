@@ -7,6 +7,7 @@ public class Global : MonoBehaviour
     public static Global instance;
 
     public bool isRandMap;
+    public string mapName;
 
     public int fps;
 

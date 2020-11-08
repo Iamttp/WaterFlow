@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mono.Data.Sqlite;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -318,6 +319,113 @@ public class Scene : MonoBehaviour
         StaticBatchingUtility.Combine(gameObject); // 静态批处理
     }
 
+    public static List<Vector2Int> GetListVec2(string str)
+    {
+        List<Vector2Int> res = new List<Vector2Int>();
+
+        if (str == null || str == "" || str.Length == 0) return res;
+        string[] strs = str.Split('&');
+        foreach (string item in strs)
+        {
+            if (item.IndexOf(',') == -1)
+            {
+                Debug.Log(item);
+                continue;
+            }
+            var temp = item.Trim(new char[2] { '(', ')' }).Split(',');
+            res.Add(new Vector2Int(System.Convert.ToInt32(temp[0]), System.Convert.ToInt32(temp[1])));
+        }
+        return res;
+    }
+
+    void initSceneFromDB()
+    {
+        string appDBPath = Application.persistentDataPath + "/iamttp.db";
+        DbAccess db = new DbAccess("URI=file:" + appDBPath);
+
+        int size = 0; // TODO
+        sizeOfHouse = 0;
+        using (SqliteDataReader sqReader = db.SelectWhere("mapTable", new string[] { "i", "j", "type", "indexOfArray" }, new string[] { "mapIndex" }, new string[] { "=" }, new string[] { Global.instance.mapName }))
+        {
+            while (sqReader.Read())
+            {
+                size++;
+                if (sqReader.GetInt32(sqReader.GetOrdinal("type")) == 2) sizeOfHouse++;
+            }
+            sqReader.Close();
+        }
+        width = height = (int)Mathf.Sqrt(size);
+
+        housePosArray = new List<Vector2Int>();
+        for (int i = 0; i < sizeOfHouse; i++) housePosArray.Add(new Vector2Int());
+
+        table = new node[width, height];
+        visTable = new bool[width, height];
+        g = new int[sizeOfHouse, sizeOfHouse];
+        posToHouse = new Dictionary<Vector2Int, GameObject>();
+        houseOfOwner = new int[sizeOfHouse];
+        soldierSet = new HashSet<GameObject>();
+        ligVis = new float[width, height];
+        houseRoadPath = new List<Vector2Int>[sizeOfHouse, sizeOfHouse];
+        Global.instance.sizeOfHouse = sizeOfHouse; // TODO 注意global
+
+        using (SqliteDataReader sqReader = db.SelectWhere("mapTable", new string[] { "i", "j", "type", "indexOfArray" }, new string[] { "mapIndex" }, new string[] { "=" }, new string[] { Global.instance.mapName }))
+        {
+            while (sqReader.Read())
+            {
+                int i = sqReader.GetInt32(sqReader.GetOrdinal("i"));
+                int j = sqReader.GetInt32(sqReader.GetOrdinal("j"));
+                table[i, j].type = sqReader.GetInt32(sqReader.GetOrdinal("type"));
+                table[i, j].indexOfArray = sqReader.GetInt32(sqReader.GetOrdinal("indexOfArray"));
+            }
+            sqReader.Close();
+        }
+
+        using (SqliteDataReader sqReader = db.SelectWhere("housePosArray", new string[] { "i", "owner", "Vec2" }, new string[] { "mapIndex" }, new string[] { "=" }, new string[] { Global.instance.mapName }))
+        {
+            while (sqReader.Read())
+            {
+                int i = sqReader.GetInt32(sqReader.GetOrdinal("i"));
+                string item = sqReader.GetString(sqReader.GetOrdinal("Vec2"));
+
+                var temp = item.Trim(new char[2] { '(', ')' }).Split(',');
+
+                housePosArray[i] = new Vector2Int(System.Convert.ToInt32(temp[0]), System.Convert.ToInt32(temp[1]));
+                houseOfOwner[i] = sqReader.GetInt32(sqReader.GetOrdinal("owner"));
+            }
+            sqReader.Close();
+        }
+
+
+        using (SqliteDataReader sqReader = db.SelectWhere("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "mapIndex" }, new string[] { "=" }, new string[] { Global.instance.mapName }))
+        {
+            while (sqReader.Read())
+            {
+                int i = sqReader.GetInt32(sqReader.GetOrdinal("i"));
+                int j = sqReader.GetInt32(sqReader.GetOrdinal("j"));
+                //if (i == j) continue;
+
+                houseRoadPath[i, j] = GetListVec2(sqReader.GetString(sqReader.GetOrdinal("ListVec2")));
+
+                houseRoadPath[j, i] = new List<Vector2Int>(houseRoadPath[i, j]);
+                houseRoadPath[j, i].Reverse();
+                g[j, i] = g[i, j] = houseRoadPath[i, j].Count;
+            }
+            sqReader.Close();
+        }
+
+        for (int i = 0; i < sizeOfHouse; i++)
+            for (int j = 0; j < sizeOfHouse; j++)
+                if (i != j)
+                    if (houseRoadPath[i, j] == null || houseRoadPath[i, j].Count == 0)
+                    {
+                        houseRoadPath[i, j] = null;
+                        g[j, i] = g[i, j] = 0;
+                    }
+
+        db.CloseSqlConnection();
+    }
+
     void Start()
     {
         if (Global.instance.isRandMap)
@@ -328,7 +436,7 @@ public class Scene : MonoBehaviour
         }
         else
         {
-            // TODO read
+            initSceneFromDB();
             renderScene();
         }
         level.text = "Level " + Global.instance.lev;
