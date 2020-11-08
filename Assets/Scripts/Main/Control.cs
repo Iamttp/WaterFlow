@@ -11,7 +11,6 @@ public class Control : MonoBehaviour
 
     void Start()
     {
-        slider = Control2.instance.slider;
         maxOrt = Control2.maxOrt;
         minOrt = Control2.minOrt;
     }

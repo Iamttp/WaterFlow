@@ -2449,11 +2449,6 @@ MonoBehaviour:
   sizeOfVis: 3
   allScale: 1
   houseOfOwner: 
-  colorTable:
-  - {r: 0.077162705, g: 0.248432, b: 0.9622642, a: 1}
-  - {r: 0.9433962, g: 0.06674972, b: 0.06674972, a: 1}
-  - {r: 0.9528302, g: 0.0764062, b: 0.94537675, a: 1}
-  - {r: 0.4484298, g: 0.9716981, b: 0.05958529, a: 1}
   housePosArray: []
   canvas: {fileID: 138676339}
 --- !u!4 &1711564578
@@ -2483,7 +2478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f788bd8d5673394a99527da5a6c7b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 0}
+  slider: {fileID: 996303434}
 --- !u!114 &1711564580
 MonoBehaviour:
   m_ObjectHideFlags: 0

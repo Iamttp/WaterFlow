@@ -15,24 +15,27 @@ public class MapSelect : MonoBehaviour
     void Start()
     {
         string appDBPath = Application.persistentDataPath + "/iamttp.db";
-        DbAccess db = new DbAccess("URI=file:" + appDBPath);
-
-        using (SqliteDataReader sqReader = db.ExecuteQuery("select mapIndex from mapTable group by mapIndex"))
+        if (System.IO.File.Exists(appDBPath))
         {
-            while (sqReader.Read())
+            DbAccess db = new DbAccess("URI=file:" + appDBPath);
+
+            using (SqliteDataReader sqReader = db.ExecuteQuery("select mapIndex from mapTable group by mapIndex"))
             {
-                string str = sqReader.GetString(sqReader.GetOrdinal("mapIndex"));
-                Button NewButton = Instantiate(ButtonPrefab);
-                NewButton.transform.SetParent(panel.transform);
-                NewButton.GetComponentInChildren<Text>().text = str;
-                NewButton.onClick.AddListener(delegate ()
+                while (sqReader.Read())
                 {
-                    OnClickAddButton(NewButton);
-                });
+                    string str = sqReader.GetString(sqReader.GetOrdinal("mapIndex"));
+                    Button NewButton = Instantiate(ButtonPrefab);
+                    NewButton.transform.SetParent(panel.transform);
+                    NewButton.GetComponentInChildren<Text>().text = str;
+                    NewButton.onClick.AddListener(delegate ()
+                    {
+                        OnClickAddButton(NewButton);
+                    });
+                }
+                sqReader.Close();
             }
-            sqReader.Close();
+            db.CloseSqlConnection();
         }
-        db.CloseSqlConnection();
     }
 
     void OnClickAddButton(Button NewButton)
@@ -79,6 +82,8 @@ public class MapSelect : MonoBehaviour
 
     public void deleteCreation()
     {
+        if (mapName == null || mapName == "") return;
+
         string appDBPath = Application.persistentDataPath + "/iamttp.db";
         DbAccess db = new DbAccess("URI=file:" + appDBPath);
 

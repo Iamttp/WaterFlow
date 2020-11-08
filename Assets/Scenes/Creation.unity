@@ -345,6 +345,7 @@ RectTransform:
   - {fileID: 206472027}
   - {fileID: 1040114055}
   - {fileID: 1123597946}
+  - {fileID: 981016569}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -585,8 +586,8 @@ GameObject:
   m_Component:
   - component: {fileID: 285553609}
   - component: {fileID: 285553608}
-  - component: {fileID: 285553610}
   - component: {fileID: 285553611}
+  - component: {fileID: 285553610}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -608,11 +609,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 0
   height: 0
-  flag: 0
   stop: {fileID: 4248667660118219598, guid: 528ca0708bddf21429eaa130039528af, type: 3}
   go: {fileID: 4248667660118219598, guid: f74f79c678ee42a488786ad9145c2571, type: 3}
   dragHouse: {fileID: 3208051342882307689, guid: da8bea61188dcff47bc62e83dc9850fc,
     type: 3}
+  bugText: {fileID: 981016570}
 --- !u!4 &285553609
 Transform:
   m_ObjectHideFlags: 0
@@ -636,7 +637,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 285553607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc8e105ba299e0b449fa0c0352037eb4, type: 3}
+  m_Script: {fileID: 11500000, guid: a9ad83bcca5f2f043b1eeda1a19ced16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1040114056}
@@ -652,7 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f788bd8d5673394a99527da5a6c7b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 0}
+  slider: {fileID: 1040114056}
 --- !u!1 &336446203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1027,84 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &981016568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 981016569}
+  - component: {fileID: 981016571}
+  - component: {fileID: 981016570}
+  m_Layer: 5
+  m_Name: BugText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &981016569
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981016568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 153692783}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -131.47, y: 380.34}
+  m_SizeDelta: {x: 262.93176, y: 760.6813}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &981016570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981016568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &981016571
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981016568}
+  m_CullTransparentMesh: 0
 --- !u!1 &1040114054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1194,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 285553610}
+      - m_Target: {fileID: 0}
         m_MethodName: sliderControl
         m_Mode: 1
         m_Arguments:

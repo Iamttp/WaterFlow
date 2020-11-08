@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Creation : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Creation : MonoBehaviour
     public GameObject stop;
     public GameObject go;
     public GameObject dragHouse;
+    public Text bugText;
 
     void Awake()
     {
@@ -105,88 +107,95 @@ public class Creation : MonoBehaviour
 
     public void test()
     {
-        houseArray = new List<Vector2Int>();
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-                if (tableOfType[i, j] == 2)
+        try
+        {
+            houseArray = new List<Vector2Int>();
+            for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
+                    if (tableOfType[i, j] == 2)
+                    {
+                        houseArray.Add(new Vector2Int(i, j));
+                    }
+            int num = 0;
+            int firstOwner = 0;
+            for (int i = 0; i < houseArray.Count; i++)
+            {
+                int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
+                if (i == 0) firstOwner = owner;
+                if (owner == firstOwner) num++;
+            }
+            if (num == houseArray.Count) return; // 若全为
+
+            houseRoadPath = new List<Vector2Int>[houseArray.Count, houseArray.Count];
+            for (int i = 0; i < houseArray.Count; i++)
+                for (int j = 0; j < houseArray.Count; j++)
                 {
-                    houseArray.Add(new Vector2Int(i, j));
+                    int bi = Mathf.RoundToInt(houseArray[i].x);
+                    int bj = Mathf.RoundToInt(houseArray[i].y);
+                    int ei = Mathf.RoundToInt(houseArray[j].x);
+                    int ej = Mathf.RoundToInt(houseArray[j].y);
+                    string s1 = "[" + bi + "," + bj + "],[" + ei + "," + ej + "]";
+                    string s2 = "[" + ei + "," + ej + "],[" + bi + "," + bj + "]";
+                    if (dic.ContainsKey(s1)) houseRoadPath[i, j] = dic[s1];
+                    if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
                 }
 
-        int num = 0;
-        int firstOwner = 0;
-        for (int i = 0; i < houseArray.Count; i++)
-        {
-            int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
-            if (i == 0) firstOwner = owner;
-            if (owner == firstOwner) num++;
-        }
-        if (num == houseArray.Count) return; // 若全为
+            // TODO 保存地图信息
+            // https://www.xuanyusong.com/archives/831
 
-        houseRoadPath = new List<Vector2Int>[houseArray.Count, houseArray.Count];
-        for (int i = 0; i < houseArray.Count; i++)
-            for (int j = 0; j < houseArray.Count; j++)
+            Global.instance.mapName = System.DateTime.Now.ToString();
+
+            string appDBPath = Application.persistentDataPath + "/iamttp.db";
+            DbAccess db;
+            if (!System.IO.File.Exists(appDBPath))
             {
-                int bi = Mathf.RoundToInt(houseArray[i].x);
-                int bj = Mathf.RoundToInt(houseArray[i].y);
-                int ei = Mathf.RoundToInt(houseArray[j].x);
-                int ej = Mathf.RoundToInt(houseArray[j].y);
-                string s1 = "[" + bi + "," + bj + "],[" + ei + "," + ej + "]";
-                string s2 = "[" + ei + "," + ej + "],[" + bi + "," + bj + "]";
-                if (dic.ContainsKey(s1)) houseRoadPath[i, j] = dic[s1];
-                if (dic.ContainsKey(s2)) houseRoadPath[j, i] = dic[s2];
+                db = new DbAccess("URI=file:" + appDBPath);
+                db.CreateTable("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, new string[] { "text", "integer", "integer", "text" });
+                db.CreateTable("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "text", "integer", "integer", "text" });
+                db.CreateTable("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, new string[] { "text", "integer", "integer", "integer", "integer" });
+            }
+            else
+            {
+                db = new DbAccess("URI=file:" + appDBPath);
             }
 
-        // TODO 保存地图信息
-        // https://www.xuanyusong.com/archives/831
-
-        Global.instance.mapName = System.DateTime.Now.ToString();
-
-        string appDBPath = Application.persistentDataPath + "/iamttp.db";
-        DbAccess db;
-        if (!System.IO.File.Exists(appDBPath))
-        {
-            db = new DbAccess("URI=file:" + appDBPath);
-            db.CreateTable("housePosArray", new string[] { "mapIndex", "i", "owner", "Vec2" }, new string[] { "text", "integer", "integer", "text" });
-            db.CreateTable("houseRoadPath", new string[] { "mapIndex", "i", "j", "ListVec2" }, new string[] { "text", "integer", "integer", "text" });
-            db.CreateTable("mapTable", new string[] { "mapIndex", "i", "j", "type", "indexOfArray" }, new string[] { "text", "integer", "integer", "integer", "integer" });
-        }
-        else
-        {
-            db = new DbAccess("URI=file:" + appDBPath);
-        }
-
-        int index = 0;
-        List<string[]> insertStr = new List<string[]>();
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-            {
-                insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(),
+            int index = 0;
+            List<string[]> insertStr = new List<string[]>();
+            for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
+                {
+                    insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(),
                     "'" + tableOfType[i, j].ToString() + "'", "'" + index.ToString() + "'" });
-                if (tableOfType[i, j] == 2) index++;
-            }
-        db.InsertIntoAll("mapTable", insertStr);
+                    if (tableOfType[i, j] == 2) index++;
+                }
+            db.InsertIntoAll("mapTable", insertStr);
 
-        insertStr = new List<string[]>();
-        for (int i = 0; i < houseArray.Count; i++)
-        {
-            int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
-            insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), owner.ToString(), "'" + houseArray[i].ToString() + "'" });
-        }
-        db.InsertIntoAll("housePosArray", insertStr);
-
-        insertStr = new List<string[]>();
-        for (int i = 0; i < houseArray.Count; i++)
-            for (int j = 0; j < houseArray.Count; j++)
+            insertStr = new List<string[]>();
+            for (int i = 0; i < houseArray.Count; i++)
             {
-                insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(), "'" + GetString(houseRoadPath[i, j]) + "'" });
+                int owner = tableOfObj[houseArray[i].x, houseArray[i].y].GetComponent<Drag>().owner;
+                insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), owner.ToString(), "'" + houseArray[i].ToString() + "'" });
             }
-        db.InsertIntoAll("houseRoadPath", insertStr);
+            db.InsertIntoAll("housePosArray", insertStr);
 
-        db.CloseSqlConnection();
+            insertStr = new List<string[]>();
+            for (int i = 0; i < houseArray.Count; i++)
+                for (int j = 0; j < houseArray.Count; j++)
+                {
+                    insertStr.Add(new string[] { "'" + Global.instance.mapName + "'", i.ToString(), j.ToString(), "'" + GetString(houseRoadPath[i, j]) + "'" });
+                }
+            db.InsertIntoAll("houseRoadPath", insertStr);
 
-        Global.instance.isRandMap = false;
-        SceneManager.LoadScene(1);
+            db.CloseSqlConnection();
+
+            Global.instance.isRandMap = false;
+            SceneManager.LoadScene(1);
+        }
+        catch (System.Exception ex)
+        {
+            bugText.text = ex.ToString() + "\n" + ex.Message;
+
+        }
     }
 
     private static string GetString(List<Vector2Int> lists)

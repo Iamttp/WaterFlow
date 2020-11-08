@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 534566595}
   - component: {fileID: 534566596}
   - component: {fileID: 534566597}
+  - component: {fileID: 534566598}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -523,6 +524,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d3b00d6c1fc574d9c196055708e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRandMap: 0
+  mapName: 
   fps: 30
   lev: 0
   flag: 0
@@ -569,6 +572,18 @@ MonoBehaviour:
   down2: {fileID: 0}
   la: []
   lb: []
+--- !u!114 &534566598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534566593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 000f716bdfb7f644aa1fb70c45188871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &561506054
 GameObject:
   m_ObjectHideFlags: 0
