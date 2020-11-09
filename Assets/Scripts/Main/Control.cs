@@ -24,7 +24,7 @@ public class Control : MonoBehaviour
                 Camera.main.fieldOfView += 2;
             if (Camera.main.orthographicSize <= 50)
                 Camera.main.orthographicSize += 0.5F;
-            slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
+            if (slider != null) slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
         }
         //Zoom in
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -33,7 +33,7 @@ public class Control : MonoBehaviour
                 Camera.main.fieldOfView -= 2;
             if (Camera.main.orthographicSize >= 1)
                 Camera.main.orthographicSize -= 0.5F;
-            slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
+            if (slider != null) slider.value = (Camera.main.orthographicSize - minOrt) / (maxOrt - minOrt);
         }
 
         //移动

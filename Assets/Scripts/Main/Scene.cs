@@ -522,7 +522,25 @@ public class Scene : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-
+    public Text speedText;
+    public void speedFun()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 2;
+            speedText.text = "x2";
+        }
+        else if (Time.timeScale == 2)
+        {
+            Time.timeScale = 3;
+            speedText.text = "x3";
+        }
+        else
+        {
+            Time.timeScale = 1;
+            speedText.text = "x1";
+        }
+    }
 
     public Canvas canvas;
     private IEnumerator alphaC()
