@@ -1,8 +1,10 @@
-Demo : <https://www.bilibili.com/video/BV1vK4y177U6/>
+apk download : <https://www.taptap.com/app/202356>
+
+Video Demo : <https://www.bilibili.com/video/BV1vK4y177U6/>
 
 # WaterFlow
 
-最新2.0版更名为`Water Flow`。游戏的核心玩法未变，游戏的迷雾由之前的GameObject遮挡改为点光源光照。
+最新2.0版更名为`Water Flow`。游戏的核心玩法未变，游戏的迷雾由之前的GameObject遮挡改为点光源光照。加入自定义地图功能。
 
 具体操作演示： <https://www.bilibili.com/video/BV1vK4y177U6/>
 
@@ -21,6 +23,28 @@ Demo : <https://www.bilibili.com/video/BV1vK4y177U6/>
 * 水波纹设计
 
 为符合整体主题设计了水波纹，思想为在片段着色器里面对纹理坐标采样时的进行偏移。百度水波纹有这方面的实现。也可以参考我github里面的实现。
+
+* 自定义地图编辑
+
+实现要实现地图数据的保存，采用了SQLite保存，为保证保存速度，采用批量插入。
+需要注意的是在Android平台下，SQLite的批量插入格式为：
+
+```sql
+insert into 表名(列名1,列名2)    
+select  值1,值2
+union all 
+select 值1,值2
+```
+
+区别于
+
+```sql
+insert into 表名(列名1,列名2)    
+values  (值1,值2),
+        (值1,值2)
+```
+
+并且一次最多500条数据。
 
 ---
 
