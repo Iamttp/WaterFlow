@@ -193,6 +193,7 @@ public class House : MonoBehaviour
     private void OnGUI()
     {
         if (owner != Global.instance.owner && Scene.instance.ligVis[pos.x, pos.y] < 0.2f) return;
+        if (Scene.instance.plane.activeSelf) return;
 
         style1 = guiMe.button;
         style2 = guiMe.label;
@@ -214,7 +215,7 @@ public class House : MonoBehaviour
             }
         }
 
-        if(value >= 10) 
+        if (value >= 10)
             GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), value.ToString() + "/" + maxValue.ToString(), style2);
         else
             GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 120, 70), value.ToString() + "/" + maxValue.ToString(), style2);

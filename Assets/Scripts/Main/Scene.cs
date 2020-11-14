@@ -505,8 +505,16 @@ public class Scene : MonoBehaviour
         }
     }
 
-
+    public GameObject plane;
+    public Button okBtn;
     public void restart()
+    {
+        plane.SetActive(true);
+        okBtn.onClick.RemoveAllListeners();
+        okBtn.onClick.AddListener(restartYes);
+    }
+
+    public void restartYes()
     {
         Global.instance.DataInit();
         SceneManager.LoadScene(1);
@@ -521,8 +529,20 @@ public class Scene : MonoBehaviour
 
     public void backFun()
     {
+        plane.SetActive(true);
+        okBtn.onClick.RemoveAllListeners();
+        okBtn.onClick.AddListener(backFunYes);
+    }
+
+    public void backFunYes()
+    {
         Global.instance.DataInit();
         SceneManager.LoadScene(0);
+    }
+
+    public void backFunNo()
+    {
+        plane.SetActive(false);
     }
 
     public Text speedText;
