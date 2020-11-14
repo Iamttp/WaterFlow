@@ -471,8 +471,11 @@ public class Scene : MonoBehaviour
         }
     }
 
+    public Toggle isMode;
+
     void Update()
     {
+        Global.instance.isMode = isMode.isOn;
         if (Global.instance.isStop) stopButton.text = "继续";
         else stopButton.text = "停止";
         if (Global.instance.isStop) return;

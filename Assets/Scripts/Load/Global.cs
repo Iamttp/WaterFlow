@@ -54,6 +54,7 @@ public class Global : MonoBehaviour
     public int upTime; // 升级次数
 
     // 特效开关
+    public bool isMode;
     public bool isShakeOpen;
     public bool isDeepOpen;
 

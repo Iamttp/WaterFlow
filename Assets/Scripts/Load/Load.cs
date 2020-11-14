@@ -41,6 +41,7 @@ public class Load : MonoBehaviour
 
             waterSpeed = 0.01f;
 
+            Global.instance.isMode = true;
             Global.instance.isShakeOpen = true;
             Global.instance.isDeepOpen = true;
         }

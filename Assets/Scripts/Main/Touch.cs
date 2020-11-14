@@ -23,12 +23,16 @@ public class Touch : MonoBehaviour
 
     void Start()
     {
+        if (Global.instance.isMode) return;
+
         lastObj = new GameObject();
         panel.SetActive(false);
     }
 
     void Update()
     {
+        if (Global.instance.isMode) return;
+
         hitTime += Time.deltaTime;
         if (hitTime > 0.2f)
         {
@@ -46,7 +50,7 @@ public class Touch : MonoBehaviour
                         {
                             if (Global.instance.diff == 0 || Global.instance.diff == 2)
                             {
-                                if (obj.GetComponent<House>().owner != Global.instance.owner && Scene.instance.ligVis[obj.GetComponent<House>().pos.x, obj.GetComponent<House>().pos.y] < 0.2f)
+                                if (script.owner != Global.instance.owner && Scene.instance.ligVis[script.pos.x, script.pos.y] < 0.2f)
                                 {
 
                                 }
@@ -56,7 +60,7 @@ public class Touch : MonoBehaviour
                                     panel.SetActive(true);
                                     houseInfo(obj);
                                 }
-                                if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                if (script.owner == Global.instance.owner || Global.instance.owner == -1)
                                 {
                                     isSelect = true;
                                     obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
@@ -66,7 +70,7 @@ public class Touch : MonoBehaviour
                             {
                                 if (!Global.instance.isStop) // 不暂停时点选
                                 {
-                                    if (obj.GetComponent<House>().owner == Global.instance.owner || Global.instance.owner == -1)
+                                    if (script.owner == Global.instance.owner || Global.instance.owner == -1)
                                     {
                                         isSelect = true;
                                         obj.SendMessage("OnTouched", SendMessageOptions.DontRequireReceiver);
@@ -74,7 +78,7 @@ public class Touch : MonoBehaviour
                                 }
                                 else // 暂停时查看
                                 {
-                                    if (obj.GetComponent<House>().owner != Global.instance.owner && Scene.instance.ligVis[obj.GetComponent<House>().pos.x, obj.GetComponent<House>().pos.y] < 0.2f)
+                                    if (script.owner != Global.instance.owner && Scene.instance.ligVis[script.pos.x, script.pos.y] < 0.2f)
                                     {
 
                                     }
@@ -88,8 +92,8 @@ public class Touch : MonoBehaviour
                         }
                         else
                         {
-                            if (Global.instance.diff == 0 || Global.instance.diff == 2) 
-                                if(lastObj.name == "house(Clone)") Global.instance.isStop = false;
+                            if (Global.instance.diff == 0 || Global.instance.diff == 2)
+                                if (lastObj.name == "house(Clone)") Global.instance.isStop = false;
                             if (!Global.instance.isStop)
                             {
                                 isSelect = false;
@@ -104,7 +108,7 @@ public class Touch : MonoBehaviour
                                 }
                         }
                     }
-                    else
+                    else if (lastObj != null)
                     {
                         if (Global.instance.diff == 0 || Global.instance.diff == 2)
                             if (lastObj.name == "house(Clone)") Global.instance.isStop = false;

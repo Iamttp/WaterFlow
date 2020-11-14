@@ -16,6 +16,7 @@ public class Option : MonoBehaviour
 
     public Toggle deep;
     public Toggle shake;
+    public Toggle isMode;
 
     public Canvas canvas;
 
@@ -34,6 +35,7 @@ public class Option : MonoBehaviour
 
         shake.isOn = Global.instance.isShakeOpen;
         deep.isOn = Global.instance.isDeepOpen;
+        isMode.isOn = Global.instance.isMode;
     }
 
     private IEnumerator alphaC()
@@ -77,6 +79,7 @@ public class Option : MonoBehaviour
 
         Global.instance.isShakeOpen = shake.isOn;
         Global.instance.isDeepOpen = deep.isOn;
+        Global.instance.isMode = isMode.isOn;
 
         Global.instance.DataInit();
         SceneManager.LoadScene(0);
