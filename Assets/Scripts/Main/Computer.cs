@@ -68,6 +68,7 @@ public class Computer : MonoBehaviour
             if (obj2.owner == Global.instance.owner) return;
             if (obj2.lv < obj2.maxLv && obj2.value >= obj2.maxValue)
             {
+                Music.instance.playDown2();
                 obj2.lv++;
                 obj2.value -= obj2.maxValue;
                 obj2.initHouse();

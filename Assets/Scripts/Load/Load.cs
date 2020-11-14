@@ -14,7 +14,7 @@ public class Load : MonoBehaviour
     public static int[] casArray = new int[] { 8, 12, 4, 16 };
     public static int[] sizeArray = new int[] { 40, 60, 20, 80 };
 
-    public static int[] camSize = new int[] { 20, 30, 10, 40 };
+    public static int[] camSize = new int[] { 21, 32, 11, 42 };
     public static int[] camX = new int[] { 20, 30, 10, 40 };
     public static int[] camY = new int[] { 20, 30, 10, 40 };
 
