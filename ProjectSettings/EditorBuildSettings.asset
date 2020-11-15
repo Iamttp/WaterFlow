@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MapSelect.unity
     guid: a8af9fbd02419444b8e31969575d5b4f
+  - enabled: 1
+    path: Assets/Scenes/Tip.unity
+    guid: 9c9f2817109f1a541936e7d28eb81bcf
   m_configObjects: {}

@@ -8,10 +8,13 @@ using UnityEngine.UI;
 /// <summary>
 /// 单例类，全局管理，包含地图生成绘制 
 /// 
+/// TODO 拖动斜率优化
+/// TODO 存档
+/// TODO 商城buff
+/// TODO 中英文表，选项
 /// TODO 不同水泡间路径重合需解决 （一定概率，水泡在道路边，影响视角）
 /// TODO 局域网 
 /// TODO 粒子特效 
-/// TODO 水滴间碰撞 （现在未考虑水滴碰撞）
 /// TODO 兵力显示（现在为水泡数显示）
 /// 
 /// 选择颜色，开始游戏
@@ -288,6 +291,21 @@ public class Scene : MonoBehaviour
         var i = Load.index2;
         Camera.main.transform.position = new Vector3(Load.camX[i], Load.camY[i], 150);
         Camera.main.orthographicSize = Load.camSize[i];
+
+
+        if (Global.instance.isRandMap)
+        {
+            if (initHouseData())
+                initRoadData();
+            renderScene();
+            //Global.instance.sizeOfHouse = 8; // TODO TODO 会出现先自定义后，水泡数bug
+            sizeOfHouse = Global.instance.sizeOfHouse;
+        }
+        else
+        {
+            initSceneFromDB();
+            renderScene();
+        }
     }
 
     void renderScene()
@@ -428,20 +446,9 @@ public class Scene : MonoBehaviour
 
     void Start()
     {
-        if (Global.instance.isRandMap)
-        {
-            if (initHouseData())
-                initRoadData();
-            renderScene();
-            //Global.instance.sizeOfHouse = 8; // TODO TODO 会出现先自定义后，水泡数bug
-            sizeOfHouse = Global.instance.sizeOfHouse;
-        }
-        else
-        {
-            initSceneFromDB();
-            renderScene();
-        }
         level.text = "Level " + Global.instance.lev;
+        speedText.text = "x" + Time.timeScale;
+        isMode.isOn = Global.instance.isMode;
         show.enabled = false;
 
         canvas.GetComponent<CanvasGroup>().alpha = 0;
@@ -466,6 +473,9 @@ public class Scene : MonoBehaviour
             SceneManager.LoadScene(3);
         else
         {
+            if (Global.instance.lev == 3)
+                Music.instance.playBack2();
+
             Global.instance.flag = false;
             SceneManager.LoadScene(1);
         }
@@ -510,6 +520,7 @@ public class Scene : MonoBehaviour
     public void restart()
     {
         plane.SetActive(true);
+        Global.instance.isStop = true;
         okBtn.onClick.RemoveAllListeners();
         okBtn.onClick.AddListener(restartYes);
     }
@@ -530,6 +541,7 @@ public class Scene : MonoBehaviour
     public void backFun()
     {
         plane.SetActive(true);
+        Global.instance.isStop = true;
         okBtn.onClick.RemoveAllListeners();
         okBtn.onClick.AddListener(backFunYes);
     }
@@ -543,6 +555,7 @@ public class Scene : MonoBehaviour
     public void backFunNo()
     {
         plane.SetActive(false);
+        Global.instance.isStop = false;
     }
 
     public Text speedText;
@@ -551,18 +564,16 @@ public class Scene : MonoBehaviour
         if (Time.timeScale == 1)
         {
             Time.timeScale = 2;
-            speedText.text = "x2";
         }
         else if (Time.timeScale == 2)
         {
             Time.timeScale = 3;
-            speedText.text = "x3";
         }
         else
         {
             Time.timeScale = 1;
-            speedText.text = "x1";
         }
+        speedText.text = "x" + Time.timeScale;
     }
 
     public Canvas canvas;

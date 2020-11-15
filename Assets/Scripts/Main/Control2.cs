@@ -79,15 +79,16 @@ public class Control2 : MonoBehaviour
             }
             else if (Input.touches[0].phase == TouchPhase.Ended)
             {
-                if (Global.instance.isMode)
-                    if (isMoved)
-                    {
-                        GameObject minObj = GetGame(touch, 30, true); // 终点判定小于30
-                        if (minObj != null && lastObj != null && lastObj.GetComponent<House>().owner == Global.instance.owner)
+                if (!Global.instance.isStop)
+                    if (Global.instance.isMode)
+                        if (isMoved)
                         {
-                            minObj.GetComponent<House>().JustAttack(lastObj);
+                            GameObject minObj = GetGame(touch, 30, true); // 终点判定小于30
+                            if (minObj != null && lastObj != null && lastObj.GetComponent<House>().owner == Global.instance.owner)
+                            {
+                                minObj.GetComponent<House>().JustAttack(lastObj);
+                            }
                         }
-                    }
             }
         }
         else if (Input.touchCount > 1)//多点触碰

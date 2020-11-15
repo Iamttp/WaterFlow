@@ -8,6 +8,7 @@ public class Music : MonoBehaviour
     //音源AudioSource相当于播放器，而音效AudioClip相当于磁带
     public AudioSource music;
     public AudioClip back;
+    public AudioClip back2;
     public AudioClip down;
     public AudioClip down2;
     public List<AudioClip> la; // 水滴到达水泡音效
@@ -33,6 +34,7 @@ public class Music : MonoBehaviour
                 lb.Add(Resources.Load<AudioClip>("Music/b" + i));
 
             back = Resources.Load<AudioClip>("Music/back");
+            back2 = Resources.Load<AudioClip>("Music/back2");
             down = Resources.Load<AudioClip>("Music/down");
             down2 = Resources.Load<AudioClip>("Music/down2");
             playBack();
@@ -56,6 +58,13 @@ public class Music : MonoBehaviour
     {
         music.loop = true;
         music.clip = back;
+        music.Play();
+    }
+
+    public void playBack2()
+    {
+        music.loop = true;
+        music.clip = back2;
         music.Play();
     }
 

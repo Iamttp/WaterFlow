@@ -53,8 +53,8 @@ public class Computer : MonoBehaviour
                 int k = Random.Range(0, obj.housePosArray.Count);
                 if (obj.posToHouse[obj.housePosArray[k]].GetComponent<House>().owner != Global.instance.owner && i != k)
                 {
-                    obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().JustAttack(obj.posToHouse[obj.housePosArray[k]]);
-                    break;
+                    if (obj.posToHouse[obj.housePosArray[i]].GetComponent<House>().JustAttack(obj.posToHouse[obj.housePosArray[k]]))
+                        break;
                 }
             }
         }

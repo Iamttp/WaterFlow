@@ -84,4 +84,21 @@ public class Option : MonoBehaviour
         Global.instance.DataInit();
         SceneManager.LoadScene(0);
     }
+
+    public void goTip()
+    {
+        Global.instance.owner = dropdownOfOwner.value;
+        Load.index1 = dropdownOfCas.value;
+        Load.index2 = dropdownOfSize.value;
+        Global.instance.sizeOfHouse = Load.casArray[dropdownOfCas.value];
+        Global.instance.width = Global.instance.height = Load.sizeArray[dropdownOfSize.value];
+        Global.instance.diff = dropdownOfDiff.value;
+
+        Global.instance.isShakeOpen = shake.isOn;
+        Global.instance.isDeepOpen = deep.isOn;
+        Global.instance.isMode = isMode.isOn;
+
+        Global.instance.DataInit();
+        SceneManager.LoadScene(10);
+    }
 }

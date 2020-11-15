@@ -33,6 +33,7 @@ public class WIN : MonoBehaviour
 
     public void backFun()
     {
+        Music.instance.playBack();
         Global.instance.DataInit();
         SceneManager.LoadScene(0);
     }

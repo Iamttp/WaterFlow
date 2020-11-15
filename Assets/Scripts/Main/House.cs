@@ -43,7 +43,7 @@ public class House : MonoBehaviour
         }
         else
         {
-            if (Global.instance.diff == 0) // 中等
+           if (Global.instance.diff == 0) // 中等
             {
                 sizeRate = 1.2f;
                 addRate = 1.2f;
@@ -73,8 +73,8 @@ public class House : MonoBehaviour
             }
         }
         maxValue = Mathf.RoundToInt(lv * perValue * sizeRate);
-        timeDisOfAdd = 1f / addRate;
-        timeDisOfMove = 0.1f / moveRate;
+        timeDisOfAdd = 1f / addRate / (1.0f + (lv - 1) * 0.1f);
+        timeDisOfMove = 0.1f / moveRate / (1.0f + (lv - 1) * 0.2f);
 
         gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Global.instance.colorTable[owner]);
         pointLig.SetActive(owner == Global.instance.owner);
@@ -179,11 +179,14 @@ public class House : MonoBehaviour
     }
 
 
-    public void JustAttack(GameObject lastObj)
+    public bool JustAttack(GameObject lastObj)
     {
+        var path = Scene.instance.houseRoadPath[lastObj.GetComponent<House>().index, index];
+        if (path == null) return false;
         int val = lastObj.GetComponent<House>().value / 2; // 每次移动一半
         if (lastObj.GetComponent<House>().owner == owner && value + val > maxValue) val = maxValue - value;
         StartCoroutine(DelayToInvokeDo(lastObj, lastObj.GetComponent<House>().value - val));
+        return true;
     }
 
     GUISkin guiMe;
@@ -204,7 +207,7 @@ public class House : MonoBehaviour
         {
             if (lv < maxLv && value >= maxValue)
             {
-                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 100, 50), "U", style1))
+                if (GUI.Button(new Rect(mPoint.x - 30, mPoint.y + 70, 80, 70), "U", style1))
                 {
                     Music.instance.playDown2();
                     Global.instance.upTime++;
